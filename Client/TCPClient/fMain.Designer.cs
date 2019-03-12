@@ -128,10 +128,12 @@
             // 
             // bwConnection
             // 
+            this.bwConnection.WorkerSupportsCancellation = true;
             this.bwConnection.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwConnection_DoWork);
             // 
             // bwMessages
             // 
+            this.bwMessages.WorkerSupportsCancellation = true;
             this.bwMessages.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwMessages_DoWork);
             // 
             // fMain

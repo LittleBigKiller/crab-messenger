@@ -29,8 +29,6 @@ namespace TCPClient
         {
             lbLogger.Items.Add("Attempting connection ...");
             bwConnection.RunWorkerAsync();
-            bConnect.Enabled = false;
-            bDisconnect.Enabled = true;
         }
 
         private void bDisconnect_Click(object sender, EventArgs e)
@@ -45,6 +43,7 @@ namespace TCPClient
             bwConnection.CancelAsync();
             bConnect.Enabled = true;
             bDisconnect.Enabled = false;
+            bSend.Enabled = false;
         }
 
         private void bwConnection_DoWork(object sender, DoWorkEventArgs e)
@@ -59,8 +58,9 @@ namespace TCPClient
             {
                 MessageBox.Show("Wrong IP Address format!", "Error");
                 this.Invoke((MethodInvoker)(() => tbAddress.Text = String.Empty));
-                this.Invoke((MethodInvoker)(() => bConnect.Enabled = false));
-                this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = true));
+                this.Invoke((MethodInvoker)(() => bConnect.Enabled = true));
+                this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = false));
+                this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
                 return;
             }
 
@@ -73,13 +73,23 @@ namespace TCPClient
                 NetworkStream ns = client.GetStream();
                 reading = new BinaryReader(ns);
                 writing = new BinaryWriter(ns);
-                writing.Write("Hitagi");
+                writing.Write("password");
                 activeCall = true;
                 bwMessages.RunWorkerAsync();
+                this.Invoke((MethodInvoker)(() => bConnect.Enabled = false));
+                this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = true));
+                this.Invoke((MethodInvoker)(() => bSend.Enabled = true));
             }
             catch (Exception ex)
             {
                 activeCall = false;
+            }
+
+            if(!activeCall)
+            {
+                this.Invoke((MethodInvoker)(() => bConnect.Enabled = true));
+                this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = false));
+                this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
             }
         }
 
@@ -93,6 +103,10 @@ namespace TCPClient
                     this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageRecieved)));
                 }
                 client.Close();
+                bwConnection.CancelAsync();
+                this.Invoke((MethodInvoker)(() => bConnect.Enabled = true));
+                this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = false));
+                this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
             }
             catch (Exception ex)
             {

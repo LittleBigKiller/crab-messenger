@@ -83,7 +83,7 @@ namespace TCPServer
                     NetworkStream ns = client.GetStream();
                     reading = new BinaryReader(ns);
                     writing = new BinaryWriter(ns);
-                    if (reading.ReadString() == "Hitagi")
+                    if (reading.ReadString() == "password")
                     {
                         bwMessages.RunWorkerAsync();
                         activeCall = true;
@@ -139,8 +139,19 @@ namespace TCPServer
 
         private void bSend_Click(object sender, EventArgs e)
         {
-            string messageSent = tbMessage.Text;
-            writing.Write(messageSent);
+            try
+            {
+                string messageSent = tbMessage.Text;
+                writing.Write(messageSent);
+            }
+            catch (Exception ex)
+            {
+                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Client closed connection unexpectedly")));
+                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("")));
+                this.Invoke((MethodInvoker)(() => bStart.Enabled = true));
+                this.Invoke((MethodInvoker)(() => bStop.Enabled = false));
+                this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
+            }
         }
     }
 }
