@@ -100,7 +100,7 @@ namespace TCPClient
                 string messageRecieved;
                 while ((messageRecieved = reading.ReadString()) != "END")
                 {
-                    this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageRecieved)));
+                    this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += DateTime.Now + "<br>" + "Anon: " + messageRecieved + "<br><hr>"));
                 }
                 client.Close();
                 bwConnection.CancelAsync();
@@ -122,7 +122,17 @@ namespace TCPClient
         {
             string messageSent = tbMessage.Text;
             writing.Write(messageSent);
-            lbLogger.Items.Add(messageSent);
+            wbMessage.DocumentText += DateTime.Now + "<br>" + "Me: " + messageSent + "<br><hr>";
+        }
+
+        private void btBold_Click(object sender, EventArgs e)
+        {
+            tbMessage.Text += "<b></b>";
+        }
+
+        private void btItalic_Click(object sender, EventArgs e)
+        {
+            tbMessage.Text += "<i></i>";
         }
     }
 }

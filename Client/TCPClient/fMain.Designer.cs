@@ -39,6 +39,9 @@
             this.bSend = new System.Windows.Forms.Button();
             this.bwConnection = new System.ComponentModel.BackgroundWorker();
             this.bwMessages = new System.ComponentModel.BackgroundWorker();
+            this.wbMessage = new System.Windows.Forms.WebBrowser();
+            this.btItalic = new System.Windows.Forms.Button();
+            this.btBold = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.nudPort)).BeginInit();
             this.SuspendLayout();
             // 
@@ -84,12 +87,12 @@
             this.lbLogger.FormattingEnabled = true;
             this.lbLogger.Location = new System.Drawing.Point(12, 31);
             this.lbLogger.Name = "lbLogger";
-            this.lbLogger.Size = new System.Drawing.Size(407, 238);
+            this.lbLogger.Size = new System.Drawing.Size(407, 43);
             this.lbLogger.TabIndex = 4;
             // 
             // bConnect
             // 
-            this.bConnect.Location = new System.Drawing.Point(12, 275);
+            this.bConnect.Location = new System.Drawing.Point(15, 301);
             this.bConnect.Name = "bConnect";
             this.bConnect.Size = new System.Drawing.Size(75, 20);
             this.bConnect.TabIndex = 5;
@@ -100,7 +103,7 @@
             // bDisconnect
             // 
             this.bDisconnect.Enabled = false;
-            this.bDisconnect.Location = new System.Drawing.Point(93, 275);
+            this.bDisconnect.Location = new System.Drawing.Point(96, 301);
             this.bDisconnect.Name = "bDisconnect";
             this.bDisconnect.Size = new System.Drawing.Size(75, 20);
             this.bDisconnect.TabIndex = 6;
@@ -110,9 +113,9 @@
             // 
             // tbMessage
             // 
-            this.tbMessage.Location = new System.Drawing.Point(174, 275);
+            this.tbMessage.Location = new System.Drawing.Point(15, 275);
             this.tbMessage.Name = "tbMessage";
-            this.tbMessage.Size = new System.Drawing.Size(164, 20);
+            this.tbMessage.Size = new System.Drawing.Size(249, 20);
             this.tbMessage.TabIndex = 7;
             // 
             // bSend
@@ -136,11 +139,42 @@
             this.bwMessages.WorkerSupportsCancellation = true;
             this.bwMessages.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwMessages_DoWork);
             // 
+            // wbMessage
+            // 
+            this.wbMessage.Location = new System.Drawing.Point(12, 80);
+            this.wbMessage.MinimumSize = new System.Drawing.Size(20, 20);
+            this.wbMessage.Name = "wbMessage";
+            this.wbMessage.Size = new System.Drawing.Size(407, 189);
+            this.wbMessage.TabIndex = 9;
+            // 
+            // btItalic
+            // 
+            this.btItalic.Location = new System.Drawing.Point(270, 275);
+            this.btItalic.Name = "btItalic";
+            this.btItalic.Size = new System.Drawing.Size(31, 20);
+            this.btItalic.TabIndex = 10;
+            this.btItalic.Text = "I";
+            this.btItalic.UseVisualStyleBackColor = true;
+            this.btItalic.Click += new System.EventHandler(this.btItalic_Click);
+            // 
+            // btBold
+            // 
+            this.btBold.Location = new System.Drawing.Point(307, 275);
+            this.btBold.Name = "btBold";
+            this.btBold.Size = new System.Drawing.Size(31, 20);
+            this.btBold.TabIndex = 11;
+            this.btBold.Text = "B";
+            this.btBold.UseVisualStyleBackColor = true;
+            this.btBold.Click += new System.EventHandler(this.btBold_Click);
+            // 
             // fMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(431, 306);
+            this.ClientSize = new System.Drawing.Size(431, 327);
+            this.Controls.Add(this.btBold);
+            this.Controls.Add(this.btItalic);
+            this.Controls.Add(this.wbMessage);
             this.Controls.Add(this.bSend);
             this.Controls.Add(this.tbMessage);
             this.Controls.Add(this.bDisconnect);
@@ -150,7 +184,6 @@
             this.Controls.Add(this.lPort);
             this.Controls.Add(this.tbAddress);
             this.Controls.Add(this.lAddress);
-            this.MaximumSize = new System.Drawing.Size(447, 345);
             this.MinimumSize = new System.Drawing.Size(447, 345);
             this.Name = "fMain";
             this.Text = "Crab Client";
@@ -173,6 +206,9 @@
         private System.Windows.Forms.Button bSend;
         private System.ComponentModel.BackgroundWorker bwConnection;
         private System.ComponentModel.BackgroundWorker bwMessages;
+        private System.Windows.Forms.WebBrowser wbMessage;
+        private System.Windows.Forms.Button btItalic;
+        private System.Windows.Forms.Button btBold;
     }
 }
 
