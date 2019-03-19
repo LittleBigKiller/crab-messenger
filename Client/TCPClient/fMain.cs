@@ -122,6 +122,7 @@ namespace TCPClient
         {
             string messageSent = tbMessage.Text;
             writing.Write(messageSent);
+            lbLogger.Items.Add(messageSent);
         }
     }
 }

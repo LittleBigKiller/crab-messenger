@@ -123,6 +123,7 @@ namespace TCPServer
                 while ((messageRecieved = reading.ReadString()) != "END")
                 {
                     this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageRecieved)));
+                    this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += "Anon:<pre>" + messageRecieved + "</pre><br>"));
                 }
                 client.Close();
                 server.Stop();
@@ -143,6 +144,11 @@ namespace TCPServer
             {
                 string messageSent = tbMessage.Text;
                 writing.Write(messageSent);
+                wbMessage.DocumentText += 
+                    DateTime.Now + "<br>" +
+                    "Me: <pre>" + messageSent + "</pre><br>" +
+                    "<hr>";
+                //lbLogger.Items.Add(messageSent);
             }
             catch (Exception ex)
             {
@@ -153,5 +159,7 @@ namespace TCPServer
                 this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
             }
         }
+
+        //private displayMessage(String )
     }
 }

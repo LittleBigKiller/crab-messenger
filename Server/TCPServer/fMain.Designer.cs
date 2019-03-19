@@ -39,6 +39,7 @@
             this.tbMessage = new System.Windows.Forms.TextBox();
             this.bSend = new System.Windows.Forms.Button();
             this.bwMessages = new System.ComponentModel.BackgroundWorker();
+            this.wbMessage = new System.Windows.Forms.WebBrowser();
             ((System.ComponentModel.ISupportInitialize)(this.nudPort)).BeginInit();
             this.SuspendLayout();
             // 
@@ -72,7 +73,7 @@
             this.lbLogger.FormattingEnabled = true;
             this.lbLogger.Location = new System.Drawing.Point(12, 32);
             this.lbLogger.Name = "lbLogger";
-            this.lbLogger.Size = new System.Drawing.Size(404, 199);
+            this.lbLogger.Size = new System.Drawing.Size(404, 43);
             this.lbLogger.TabIndex = 4;
             // 
             // bStart
@@ -136,11 +137,20 @@
             this.bwMessages.WorkerSupportsCancellation = true;
             this.bwMessages.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwMessages_DoWork);
             // 
+            // wbMessage
+            // 
+            this.wbMessage.Location = new System.Drawing.Point(12, 82);
+            this.wbMessage.MinimumSize = new System.Drawing.Size(20, 20);
+            this.wbMessage.Name = "wbMessage";
+            this.wbMessage.Size = new System.Drawing.Size(404, 149);
+            this.wbMessage.TabIndex = 10;
+            // 
             // fMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(428, 264);
+            this.Controls.Add(this.wbMessage);
             this.Controls.Add(this.bSend);
             this.Controls.Add(this.tbMessage);
             this.Controls.Add(this.nudPort);
@@ -173,6 +183,7 @@
         private System.Windows.Forms.TextBox tbMessage;
         private System.Windows.Forms.Button bSend;
         private System.ComponentModel.BackgroundWorker bwMessages;
+        private System.Windows.Forms.WebBrowser wbMessage;
     }
 }
 
