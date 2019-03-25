@@ -61,6 +61,7 @@ namespace TCPClient
                 this.Invoke((MethodInvoker)(() => bConnect.Enabled = true));
                 this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = false));
                 this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
+                this.Invoke((MethodInvoker)(() => wbMessage.DocumentText = ""));
                 return;
             }
 
@@ -90,6 +91,7 @@ namespace TCPClient
                 this.Invoke((MethodInvoker)(() => bConnect.Enabled = true));
                 this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = false));
                 this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
+                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Host is unavailable ...")));
             }
         }
 
@@ -125,12 +127,12 @@ namespace TCPClient
             wbMessage.DocumentText += DateTime.Now + "<br>" + "Me: " + messageSent + "<br><hr>";
         }
 
-        private void btBold_Click(object sender, EventArgs e)
+        private void bBold_Click(object sender, EventArgs e)
         {
             tbMessage.Text += "<b></b>";
         }
 
-        private void btItalic_Click(object sender, EventArgs e)
+        private void bItalic_Click(object sender, EventArgs e)
         {
             tbMessage.Text += "<i></i>";
         }

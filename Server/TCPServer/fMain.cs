@@ -29,11 +29,12 @@ namespace TCPServer
 
         private void bStart_Click(object sender, EventArgs e)
         {
-            lbLogger.Items.Add("Server started ...");
+            lbLogger.Items.Add("Starting server ...");
             bwConnection.RunWorkerAsync();
             bStart.Enabled = false;
             bStop.Enabled = true;
             bSend.Enabled = true;
+            wbMessage.DocumentText = "";
         }
 
         private void bStop_Click(object sender, EventArgs e)
@@ -62,11 +63,14 @@ namespace TCPServer
             }
             catch
             {
-                MessageBox.Show("Wrong IP Address format!", "Error");
+                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Error: Wrong IP Address format")));
+                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Server stopping ...")));
+                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("")));
                 this.Invoke((MethodInvoker)(() => tbAddress.Text = String.Empty));
-                this.Invoke((MethodInvoker)(() => bStart.Enabled = false));
-                this.Invoke((MethodInvoker)(() => bStop.Enabled = true));
-                this.Invoke((MethodInvoker)(() => bSend.Enabled = true));
+                this.Invoke((MethodInvoker)(() => bStart.Enabled = true));
+                this.Invoke((MethodInvoker)(() => bStop.Enabled = false));
+                this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
+                MessageBox.Show("Wrong IP Address format!", "Error");
                 return;
             }
 
@@ -123,7 +127,7 @@ namespace TCPServer
                 while ((messageRecieved = reading.ReadString()) != "END")
                 {
                     this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageRecieved)));
-                    this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += "Anon:<pre>" + messageRecieved + "</pre><br>"));
+                    this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += DateTime.Now + "<br>" + "Anon: " + messageRecieved + "<br><hr>"));
                 }
                 client.Close();
                 server.Stop();
@@ -132,6 +136,18 @@ namespace TCPServer
             {
                 this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Client closed connection unexpectedly")));
                 this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("")));
+                this.Invoke((MethodInvoker)(() => bStart.Enabled = true));
+                this.Invoke((MethodInvoker)(() => bStop.Enabled = false));
+                this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
+                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Server stopped ...")));
+                if (client != null)
+                {
+                    this.Invoke((MethodInvoker)(() => client.Close()));
+                    this.Invoke((MethodInvoker)(() => client = null));
+                    this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Closed all connections")));
+                }
+                this.Invoke((MethodInvoker)(() => server.Stop()));
+                this.Invoke((MethodInvoker)(() => bwConnection.CancelAsync()));
                 this.Invoke((MethodInvoker)(() => bStart.Enabled = true));
                 this.Invoke((MethodInvoker)(() => bStop.Enabled = false));
                 this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
@@ -144,22 +160,42 @@ namespace TCPServer
             {
                 string messageSent = tbMessage.Text;
                 writing.Write(messageSent);
-                wbMessage.DocumentText += 
-                    DateTime.Now + "<br>" +
-                    "Me: <pre>" + messageSent + "</pre><br>" +
-                    "<hr>";
-                //lbLogger.Items.Add(messageSent);
+                wbMessage.DocumentText += DateTime.Now + "<br>" + "Me: " + messageSent + "<br><hr>";
             }
-            catch (Exception ex)
+            catch
             {
-                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Client closed connection unexpectedly")));
-                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("")));
-                this.Invoke((MethodInvoker)(() => bStart.Enabled = true));
-                this.Invoke((MethodInvoker)(() => bStop.Enabled = false));
-                this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
+                lbLogger.Items.Add("");
+                lbLogger.Items.Add("Client closed connection unexpectedly");
+                lbLogger.Items.Add("Server stopped ...");
+                if (client != null)
+                {
+                    client.Close();
+                    client = null;
+                }
+                server.Stop();
+                bwConnection.CancelAsync();
+                bStart.Enabled = true;
+                bStop.Enabled = false;
+                bSend.Enabled = false;
             }
         }
 
-        //private displayMessage(String )
+        private void rbSettingsStyle0_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbSettingsStyle0.Checked)
+            {
+                this.BackColor = SystemColors.Control;
+                this.ForeColor = SystemColors.ControlText;
+            }
+        }
+
+        private void rbSettingsStyle1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbSettingsStyle1.Checked)
+            {
+                this.BackColor = SystemColors.ControlDarkDark;
+                this.ForeColor = SystemColors.ControlLight;
+            }
+        }
     }
 }

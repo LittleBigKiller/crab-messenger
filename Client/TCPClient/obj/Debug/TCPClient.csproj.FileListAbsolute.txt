@@ -8,3 +8,13 @@ C:\Users\Kmiecik Bartosz\Desktop\crab-messenger-master\Client\TCPClient\obj\Debu
 C:\Users\Kmiecik Bartosz\Desktop\crab-messenger-master\Client\TCPClient\obj\Debug\TCPClient.csproj.CoreCompileInputs.cache
 C:\Users\Kmiecik Bartosz\Desktop\crab-messenger-master\Client\TCPClient\obj\Debug\TCPClient.exe
 C:\Users\Kmiecik Bartosz\Desktop\crab-messenger-master\Client\TCPClient\obj\Debug\TCPClient.pdb
+S:\Repos\crab-messenger\Client\TCPClient\bin\Debug\TCPClient.exe.config
+S:\Repos\crab-messenger\Client\TCPClient\bin\Debug\TCPClient.exe
+S:\Repos\crab-messenger\Client\TCPClient\bin\Debug\TCPClient.pdb
+S:\Repos\crab-messenger\Client\TCPClient\obj\Debug\TCPClient.csprojAssemblyReference.cache
+S:\Repos\crab-messenger\Client\TCPClient\obj\Debug\TCPClient.fMain.resources
+S:\Repos\crab-messenger\Client\TCPClient\obj\Debug\TCPClient.Properties.Resources.resources
+S:\Repos\crab-messenger\Client\TCPClient\obj\Debug\TCPClient.csproj.GenerateResource.cache
+S:\Repos\crab-messenger\Client\TCPClient\obj\Debug\TCPClient.csproj.CoreCompileInputs.cache
+S:\Repos\crab-messenger\Client\TCPClient\obj\Debug\TCPClient.exe
+S:\Repos\crab-messenger\Client\TCPClient\obj\Debug\TCPClient.pdb

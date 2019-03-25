@@ -40,8 +40,8 @@
             this.bwConnection = new System.ComponentModel.BackgroundWorker();
             this.bwMessages = new System.ComponentModel.BackgroundWorker();
             this.wbMessage = new System.Windows.Forms.WebBrowser();
-            this.btItalic = new System.Windows.Forms.Button();
-            this.btBold = new System.Windows.Forms.Button();
+            this.bItalic = new System.Windows.Forms.Button();
+            this.bBold = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.nudPort)).BeginInit();
             this.SuspendLayout();
             // 
@@ -147,33 +147,33 @@
             this.wbMessage.Size = new System.Drawing.Size(407, 189);
             this.wbMessage.TabIndex = 9;
             // 
-            // btItalic
+            // bItalic
             // 
-            this.btItalic.Location = new System.Drawing.Point(270, 275);
-            this.btItalic.Name = "btItalic";
-            this.btItalic.Size = new System.Drawing.Size(31, 20);
-            this.btItalic.TabIndex = 10;
-            this.btItalic.Text = "I";
-            this.btItalic.UseVisualStyleBackColor = true;
-            this.btItalic.Click += new System.EventHandler(this.btItalic_Click);
+            this.bItalic.Location = new System.Drawing.Point(270, 275);
+            this.bItalic.Name = "bItalic";
+            this.bItalic.Size = new System.Drawing.Size(31, 20);
+            this.bItalic.TabIndex = 10;
+            this.bItalic.Text = "I";
+            this.bItalic.UseVisualStyleBackColor = true;
+            this.bItalic.Click += new System.EventHandler(this.bItalic_Click);
             // 
-            // btBold
+            // bBold
             // 
-            this.btBold.Location = new System.Drawing.Point(307, 275);
-            this.btBold.Name = "btBold";
-            this.btBold.Size = new System.Drawing.Size(31, 20);
-            this.btBold.TabIndex = 11;
-            this.btBold.Text = "B";
-            this.btBold.UseVisualStyleBackColor = true;
-            this.btBold.Click += new System.EventHandler(this.btBold_Click);
+            this.bBold.Location = new System.Drawing.Point(307, 275);
+            this.bBold.Name = "bBold";
+            this.bBold.Size = new System.Drawing.Size(31, 20);
+            this.bBold.TabIndex = 11;
+            this.bBold.Text = "B";
+            this.bBold.UseVisualStyleBackColor = true;
+            this.bBold.Click += new System.EventHandler(this.bBold_Click);
             // 
             // fMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(431, 327);
-            this.Controls.Add(this.btBold);
-            this.Controls.Add(this.btItalic);
+            this.Controls.Add(this.bBold);
+            this.Controls.Add(this.bItalic);
             this.Controls.Add(this.wbMessage);
             this.Controls.Add(this.bSend);
             this.Controls.Add(this.tbMessage);
@@ -207,8 +207,8 @@
         private System.ComponentModel.BackgroundWorker bwConnection;
         private System.ComponentModel.BackgroundWorker bwMessages;
         private System.Windows.Forms.WebBrowser wbMessage;
-        private System.Windows.Forms.Button btItalic;
-        private System.Windows.Forms.Button btBold;
+        private System.Windows.Forms.Button bItalic;
+        private System.Windows.Forms.Button bBold;
     }
 }
 
