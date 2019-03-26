@@ -32,7 +32,6 @@
             this.lPort = new System.Windows.Forms.Label();
             this.tbAddress = new System.Windows.Forms.TextBox();
             this.lbLogger = new System.Windows.Forms.ListBox();
-            this.bStart = new System.Windows.Forms.Button();
             this.bStop = new System.Windows.Forms.Button();
             this.nudPort = new System.Windows.Forms.NumericUpDown();
             this.bwConnection = new System.ComponentModel.BackgroundWorker();
@@ -50,6 +49,9 @@
             this.rbSettingsStyle0 = new System.Windows.Forms.RadioButton();
             this.lMessage = new System.Windows.Forms.Label();
             this.gbMessage = new System.Windows.Forms.GroupBox();
+            this.bStart = new System.Windows.Forms.Button();
+            this.lPassword = new System.Windows.Forms.Label();
+            this.tbPassword = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudPort)).BeginInit();
             this.gbSettings.SuspendLayout();
             this.gbSettingsChat.SuspendLayout();
@@ -68,7 +70,7 @@
             // lPort
             // 
             this.lPort.AutoSize = true;
-            this.lPort.Location = new System.Drawing.Point(239, 8);
+            this.lPort.Location = new System.Drawing.Point(209, 9);
             this.lPort.Name = "lPort";
             this.lPort.Size = new System.Drawing.Size(26, 13);
             this.lPort.TabIndex = 1;
@@ -89,17 +91,6 @@
             this.lbLogger.Size = new System.Drawing.Size(400, 160);
             this.lbLogger.TabIndex = 4;
             // 
-            // bStart
-            // 
-            this.bStart.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.bStart.Location = new System.Drawing.Point(12, 32);
-            this.bStart.Name = "bStart";
-            this.bStart.Size = new System.Drawing.Size(70, 20);
-            this.bStart.TabIndex = 5;
-            this.bStart.Text = "Start";
-            this.bStart.UseVisualStyleBackColor = false;
-            this.bStart.Click += new System.EventHandler(this.bStart_Click);
-            // 
             // bStop
             // 
             this.bStop.Enabled = false;
@@ -113,7 +104,7 @@
             // 
             // nudPort
             // 
-            this.nudPort.Location = new System.Drawing.Point(271, 6);
+            this.nudPort.Location = new System.Drawing.Point(241, 6);
             this.nudPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -225,7 +216,7 @@
             // rbSettingsStyle1
             // 
             this.rbSettingsStyle1.AutoSize = true;
-            this.rbSettingsStyle1.Location = new System.Drawing.Point(90, 18);
+            this.rbSettingsStyle1.Location = new System.Drawing.Point(84, 19);
             this.rbSettingsStyle1.Name = "rbSettingsStyle1";
             this.rbSettingsStyle1.Size = new System.Drawing.Size(78, 17);
             this.rbSettingsStyle1.TabIndex = 1;
@@ -265,12 +256,42 @@
             this.gbMessage.TabStop = false;
             this.gbMessage.Text = "Message Stylization";
             // 
+            // bStart
+            // 
+            this.bStart.Location = new System.Drawing.Point(11, 32);
+            this.bStart.Name = "bStart";
+            this.bStart.Size = new System.Drawing.Size(70, 20);
+            this.bStart.TabIndex = 14;
+            this.bStart.Text = "Start";
+            this.bStart.UseVisualStyleBackColor = true;
+            this.bStart.Click += new System.EventHandler(this.bStart_Click);
+            // 
+            // lPassword
+            // 
+            this.lPassword.AutoSize = true;
+            this.lPassword.Location = new System.Drawing.Point(389, 9);
+            this.lPassword.Name = "lPassword";
+            this.lPassword.Size = new System.Drawing.Size(53, 13);
+            this.lPassword.TabIndex = 15;
+            this.lPassword.Text = "Password";
+            // 
+            // tbPassword
+            // 
+            this.tbPassword.Location = new System.Drawing.Point(448, 6);
+            this.tbPassword.Name = "tbPassword";
+            this.tbPassword.PasswordChar = '*';
+            this.tbPassword.Size = new System.Drawing.Size(140, 20);
+            this.tbPassword.TabIndex = 16;
+            this.tbPassword.Text = "zaq1@WSX";
+            // 
             // fMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(606, 563);
+            this.Controls.Add(this.tbPassword);
+            this.Controls.Add(this.lPassword);
+            this.Controls.Add(this.bStart);
             this.Controls.Add(this.gbMessage);
             this.Controls.Add(this.lMessage);
             this.Controls.Add(this.gbSettings);
@@ -279,7 +300,6 @@
             this.Controls.Add(this.tbMessage);
             this.Controls.Add(this.nudPort);
             this.Controls.Add(this.bStop);
-            this.Controls.Add(this.bStart);
             this.Controls.Add(this.lbLogger);
             this.Controls.Add(this.tbAddress);
             this.Controls.Add(this.lPort);
@@ -304,7 +324,6 @@
         private System.Windows.Forms.Label lPort;
         private System.Windows.Forms.TextBox tbAddress;
         private System.Windows.Forms.ListBox lbLogger;
-        private System.Windows.Forms.Button bStart;
         private System.Windows.Forms.Button bStop;
         private System.Windows.Forms.NumericUpDown nudPort;
         private System.ComponentModel.BackgroundWorker bwConnection;
@@ -322,6 +341,9 @@
         private System.Windows.Forms.RadioButton rbSettingsStyle1;
         private System.Windows.Forms.RadioButton rbSettingsStyle0;
         private System.Windows.Forms.GroupBox gbMessage;
+        private System.Windows.Forms.Button bStart;
+        private System.Windows.Forms.Label lPassword;
+        private System.Windows.Forms.TextBox tbPassword;
     }
 }
 

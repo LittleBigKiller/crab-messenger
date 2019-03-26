@@ -87,7 +87,7 @@ namespace TCPServer
                     NetworkStream ns = client.GetStream();
                     reading = new BinaryReader(ns);
                     writing = new BinaryWriter(ns);
-                    if (reading.ReadString() == "password")
+                    if (reading.ReadString() == tbPassword.Text)
                     {
                         bwMessages.RunWorkerAsync();
                         activeCall = true;
@@ -106,11 +106,8 @@ namespace TCPServer
 
                 IPEndPoint clientIP = (IPEndPoint)client.Client.RemoteEndPoint;
                 this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: Client connected")));
-
-                //this.Invoke((MethodInvoker)(() => bStart.Enabled = false));
-                //this.Invoke((MethodInvoker)(() => bStop.Enabled = true));
             }
-            catch (Exception ex)
+            catch
             {
                 this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("No connections to close")));
                 this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("")));
@@ -126,19 +123,18 @@ namespace TCPServer
                 string messageRecieved;
                 while ((messageRecieved = reading.ReadString()) != "END")
                 {
+                    messageRecieved = messageRecieved.Replace("<", "&lt;");
+                    messageRecieved = messageRecieved.Replace(">", "&gt;");
                     this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageRecieved)));
-                    this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += DateTime.Now + "<br>" + "Anon: " + messageRecieved + "<br><hr>"));
+                    this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now + "<br>" + "Anon: " + messageRecieved + "<br><hr></div>"));
                 }
                 client.Close();
                 server.Stop();
             }
-            catch (Exception ex)
+            catch
             {
                 this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Client closed connection unexpectedly")));
                 this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("")));
-                this.Invoke((MethodInvoker)(() => bStart.Enabled = true));
-                this.Invoke((MethodInvoker)(() => bStop.Enabled = false));
-                this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
                 this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Server stopped ...")));
                 if (client != null)
                 {
@@ -159,8 +155,10 @@ namespace TCPServer
             try
             {
                 string messageSent = tbMessage.Text;
+                messageSent = messageSent.Replace("<", "&lt;");
+                messageSent = messageSent.Replace(">", "&gt;");
                 writing.Write(messageSent);
-                wbMessage.DocumentText += DateTime.Now + "<br>" + "Me: " + messageSent + "<br><hr>";
+                wbMessage.DocumentText += "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now + "<br>" + "Me: " + messageSent + "<br><hr></div>";
             }
             catch
             {
@@ -185,7 +183,7 @@ namespace TCPServer
             if (rbSettingsStyle0.Checked)
             {
                 this.BackColor = SystemColors.Control;
-                this.ForeColor = SystemColors.ControlText;
+                //this.ForeColor = SystemColors.ControlText;
             }
         }
 
@@ -193,8 +191,8 @@ namespace TCPServer
         {
             if (rbSettingsStyle1.Checked)
             {
-                this.BackColor = SystemColors.ControlDarkDark;
-                this.ForeColor = SystemColors.ControlLight;
+                this.BackColor = SystemColors.ControlDark;
+                //this.ForeColor = SystemColors.ControlLight;
             }
         }
     }

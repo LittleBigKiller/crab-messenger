@@ -18,3 +18,13 @@ S:\Repos\crab-messenger\Client\TCPClient\obj\Debug\TCPClient.csproj.GenerateReso
 S:\Repos\crab-messenger\Client\TCPClient\obj\Debug\TCPClient.csproj.CoreCompileInputs.cache
 S:\Repos\crab-messenger\Client\TCPClient\obj\Debug\TCPClient.exe
 S:\Repos\crab-messenger\Client\TCPClient\obj\Debug\TCPClient.pdb
+C:\Users\Dyrcz Jakub\Desktop\Repos\crab-messenger\Client\TCPClient\bin\Debug\TCPClient.exe.config
+C:\Users\Dyrcz Jakub\Desktop\Repos\crab-messenger\Client\TCPClient\bin\Debug\TCPClient.exe
+C:\Users\Dyrcz Jakub\Desktop\Repos\crab-messenger\Client\TCPClient\bin\Debug\TCPClient.pdb
+C:\Users\Dyrcz Jakub\Desktop\Repos\crab-messenger\Client\TCPClient\obj\Debug\TCPClient.csprojAssemblyReference.cache
+C:\Users\Dyrcz Jakub\Desktop\Repos\crab-messenger\Client\TCPClient\obj\Debug\TCPClient.fMain.resources
+C:\Users\Dyrcz Jakub\Desktop\Repos\crab-messenger\Client\TCPClient\obj\Debug\TCPClient.Properties.Resources.resources
+C:\Users\Dyrcz Jakub\Desktop\Repos\crab-messenger\Client\TCPClient\obj\Debug\TCPClient.csproj.GenerateResource.cache
+C:\Users\Dyrcz Jakub\Desktop\Repos\crab-messenger\Client\TCPClient\obj\Debug\TCPClient.csproj.CoreCompileInputs.cache
+C:\Users\Dyrcz Jakub\Desktop\Repos\crab-messenger\Client\TCPClient\obj\Debug\TCPClient.exe
+C:\Users\Dyrcz Jakub\Desktop\Repos\crab-messenger\Client\TCPClient\obj\Debug\TCPClient.pdb
