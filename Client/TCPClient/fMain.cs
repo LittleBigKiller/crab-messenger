@@ -61,7 +61,6 @@ namespace TCPClient
                 this.Invoke((MethodInvoker)(() => bConnect.Enabled = true));
                 this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = false));
                 this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
-                this.Invoke((MethodInvoker)(() => wbMessage.DocumentText = ""));
                 return;
             }
 
@@ -74,7 +73,7 @@ namespace TCPClient
                 NetworkStream ns = client.GetStream();
                 reading = new BinaryReader(ns);
                 writing = new BinaryWriter(ns);
-                writing.Write("password");
+                writing.Write(tbPass.Text);
                 activeCall = true;
                 bwMessages.RunWorkerAsync();
                 this.Invoke((MethodInvoker)(() => bConnect.Enabled = false));
@@ -91,7 +90,6 @@ namespace TCPClient
                 this.Invoke((MethodInvoker)(() => bConnect.Enabled = true));
                 this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = false));
                 this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
-                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Host is unavailable ...")));
             }
         }
 
@@ -102,7 +100,7 @@ namespace TCPClient
                 string messageRecieved;
                 while ((messageRecieved = reading.ReadString()) != "END")
                 {
-                    this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += DateTime.Now + "<br>" + "Anon: " + messageRecieved + "<br><hr>"));
+                    this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += "<div style=\"width:350px; word-wrap:break-word;\">" + DateTime.Now + "<br>" + "Anon: " + messageRecieved + "<br><hr></div>"));
                 }
                 client.Close();
                 bwConnection.CancelAsync();
@@ -124,17 +122,33 @@ namespace TCPClient
         {
             string messageSent = tbMessage.Text;
             writing.Write(messageSent);
-            wbMessage.DocumentText += DateTime.Now + "<br>" + "Me: " + messageSent + "<br><hr>";
+            wbMessage.DocumentText += "<div style=\"width:350px; word-wrap:break-word;\">" + DateTime.Now + "<br>" + "Me: " + messageSent + "<br><hr></div>";
         }
 
-        private void bBold_Click(object sender, EventArgs e)
+        private void btBold_Click(object sender, EventArgs e)
         {
             tbMessage.Text += "<b></b>";
         }
 
-        private void bItalic_Click(object sender, EventArgs e)
+        private void btItalic_Click(object sender, EventArgs e)
         {
             tbMessage.Text += "<i></i>";
+        }
+
+        private void rbDark_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbDark.Checked)
+            {
+                this.BackColor = SystemColors.ControlDark;
+            }
+        }
+
+        private void rbLight_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbLight.Checked)
+            {
+                this.BackColor = SystemColors.Control;
+            }
         }
     }
 }

@@ -1,0 +1,10 @@
+S:\Repos\crab-messenger\Server\TCPServer\bin\Debug\TCPServer.exe.config
+S:\Repos\crab-messenger\Server\TCPServer\bin\Debug\TCPServer.exe
+S:\Repos\crab-messenger\Server\TCPServer\bin\Debug\TCPServer.pdb
+S:\Repos\crab-messenger\Server\TCPServer\obj\Debug\TCPServer.csprojAssemblyReference.cache
+S:\Repos\crab-messenger\Server\TCPServer\obj\Debug\TCPServer.fMain.resources
+S:\Repos\crab-messenger\Server\TCPServer\obj\Debug\TCPServer.Properties.Resources.resources
+S:\Repos\crab-messenger\Server\TCPServer\obj\Debug\TCPServer.csproj.GenerateResource.cache
+S:\Repos\crab-messenger\Server\TCPServer\obj\Debug\TCPServer.csproj.CoreCompileInputs.cache
+S:\Repos\crab-messenger\Server\TCPServer\obj\Debug\TCPServer.exe
+S:\Repos\crab-messenger\Server\TCPServer\obj\Debug\TCPServer.pdb
