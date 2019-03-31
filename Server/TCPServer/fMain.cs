@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CommonMark;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,7 +22,6 @@ namespace TCPServer
         private TcpClient client = null;
         private BinaryWriter writing = null;
         private BinaryReader reading = null;
-        private bool activeCall = false;
 
         public fMain()
         {
@@ -90,18 +91,15 @@ namespace TCPServer
                     if (reading.ReadString() == tbPassword.Text)
                     {
                         bwMessages.RunWorkerAsync();
-                        activeCall = true;
                     }
                     else
                     {
                         client.Close();
                         server.Stop();
-                        activeCall = false;
                     }
                 }
                 catch
                 {
-                    activeCall = false;
                 }
 
                 IPEndPoint clientIP = (IPEndPoint)client.Client.RemoteEndPoint;
@@ -125,7 +123,7 @@ namespace TCPServer
                 {
                     messageRecieved = messageRecieved.Replace("<", "&lt;");
                     messageRecieved = messageRecieved.Replace(">", "&gt;");
-                    this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageRecieved)));
+                    //this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageRecieved)));
                     this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now + "<br>" + "Anon: " + messageRecieved + "<br><hr></div>"));
                 }
                 client.Close();
@@ -154,27 +152,34 @@ namespace TCPServer
         {
             try
             {
-                string messageSent = tbMessage.Text;
-                messageSent = messageSent.Replace("<", "&lt;");
-                messageSent = messageSent.Replace(">", "&gt;");
+                MessageObject product = new MessageObject(tbSettingsUsername.Text, tbMessage.Text);
+
+                string json = JsonConvert.SerializeObject(product);
+
+                string messageSent = json; //tbMessage.Text;
+                //messageSent = messageSent.Replace("<", "&lt;");
+                //messageSent = messageSent.Replace(">", "&gt;");
                 writing.Write(messageSent);
-                wbMessage.DocumentText += "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now + "<br>" + "Me: " + messageSent + "<br><hr></div>";
+                displayMessage(messageSent);
+                //wbMessage.DocumentText += "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now + "<br>" + product.UName + ": " + product.Message + "<br><hr></div>";
             }
-            catch
+            catch (Exception ex)
             {
                 lbLogger.Items.Add("");
                 lbLogger.Items.Add("Client closed connection unexpectedly");
-                lbLogger.Items.Add("Server stopped ...");
+                //lbLogger.Items.Add("Server stopped ...");
                 if (client != null)
                 {
                     client.Close();
                     client = null;
                 }
-                server.Stop();
+                //server.Stop();
                 bwConnection.CancelAsync();
-                bStart.Enabled = true;
-                bStop.Enabled = false;
-                bSend.Enabled = false;
+                //bStart.Enabled = true;
+                //bStop.Enabled = false;
+                //bSend.Enabled = false;
+                //bwConnection.RunWorkerAsync();
+                MessageBox.Show(ex.ToString());
             }
         }
 
@@ -194,6 +199,39 @@ namespace TCPServer
                 this.BackColor = SystemColors.ControlDark;
                 //this.ForeColor = SystemColors.ControlLight;
             }
+        }
+
+        private void displayMessage(string messageBlock)
+        {
+            lbLogger.Items.Add(messageBlock);
+            MessageObject product = JsonConvert.DeserializeObject<MessageObject>(messageBlock);
+            lbLogger.Items.Add("UName = " + product.uName);
+            lbLogger.Items.Add("UMsg = " + product.uMsg);
+
+            string message = product.uMsg;
+            message = message.Replace("<", "&lt;");
+            message = message.Replace(">", "&gt;");
+
+            message = CommonMarkConverter.Convert(message);
+            lbLogger.Items.Add("message = " + message);
+
+            message = message.Replace("<p>", "");
+            message = message.Replace("</p>", "");
+            lbLogger.Items.Add("message = " + message);
+
+            wbMessage.DocumentText += "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now + "<br>" + product.uName + ": " + message + "<br><hr></div>";
+        }
+    }
+
+    internal class MessageObject
+    {
+        public readonly string uName;
+        public readonly string uMsg;
+
+        public MessageObject(string uname, string umsg)
+        {
+            uName = uname;
+            uMsg = umsg;
         }
     }
 }
