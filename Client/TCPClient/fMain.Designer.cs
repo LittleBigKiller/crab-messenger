@@ -43,20 +43,20 @@
             this.btItalic = new System.Windows.Forms.Button();
             this.btBold = new System.Windows.Forms.Button();
             this.gbSettings = new System.Windows.Forms.GroupBox();
+            this.gbIdentity = new System.Windows.Forms.GroupBox();
+            this.cbReveal = new System.Windows.Forms.CheckBox();
+            this.tbUsername = new System.Windows.Forms.TextBox();
+            this.lUserName = new System.Windows.Forms.Label();
             this.gbStyle = new System.Windows.Forms.GroupBox();
             this.rbLight = new System.Windows.Forms.RadioButton();
             this.rbDark = new System.Windows.Forms.RadioButton();
-            this.tbUserName = new System.Windows.Forms.TextBox();
-            this.lUserName = new System.Windows.Forms.Label();
-            this.gbIdentity = new System.Windows.Forms.GroupBox();
-            this.cbReveal = new System.Windows.Forms.CheckBox();
             this.gbStylization = new System.Windows.Forms.GroupBox();
             this.tbPass = new System.Windows.Forms.TextBox();
             this.lPass = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.nudPort)).BeginInit();
             this.gbSettings.SuspendLayout();
-            this.gbStyle.SuspendLayout();
             this.gbIdentity.SuspendLayout();
+            this.gbStyle.SuspendLayout();
             this.gbStylization.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -75,6 +75,7 @@
             this.tbAddress.Name = "tbAddress";
             this.tbAddress.Size = new System.Drawing.Size(100, 20);
             this.tbAddress.TabIndex = 1;
+            this.tbAddress.Text = "127.0.0.1";
             // 
             // lPort
             // 
@@ -96,6 +97,11 @@
             this.nudPort.Name = "nudPort";
             this.nudPort.Size = new System.Drawing.Size(120, 20);
             this.nudPort.TabIndex = 3;
+            this.nudPort.Value = new decimal(new int[] {
+            5555,
+            0,
+            0,
+            0});
             // 
             // lbLogger
             // 
@@ -193,6 +199,47 @@
             this.gbSettings.TabStop = false;
             this.gbSettings.Text = "Settings";
             // 
+            // gbIdentity
+            // 
+            this.gbIdentity.Controls.Add(this.cbReveal);
+            this.gbIdentity.Controls.Add(this.tbUsername);
+            this.gbIdentity.Controls.Add(this.lUserName);
+            this.gbIdentity.Location = new System.Drawing.Point(6, 72);
+            this.gbIdentity.Name = "gbIdentity";
+            this.gbIdentity.Size = new System.Drawing.Size(173, 82);
+            this.gbIdentity.TabIndex = 6;
+            this.gbIdentity.TabStop = false;
+            this.gbIdentity.Text = "Identity";
+            // 
+            // cbReveal
+            // 
+            this.cbReveal.AutoSize = true;
+            this.cbReveal.Checked = true;
+            this.cbReveal.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbReveal.Location = new System.Drawing.Point(6, 19);
+            this.cbReveal.Name = "cbReveal";
+            this.cbReveal.Size = new System.Drawing.Size(111, 17);
+            this.cbReveal.TabIndex = 2;
+            this.cbReveal.Text = "Reveal Username";
+            this.cbReveal.UseVisualStyleBackColor = true;
+            // 
+            // tbUsername
+            // 
+            this.tbUsername.Location = new System.Drawing.Point(6, 55);
+            this.tbUsername.Name = "tbUsername";
+            this.tbUsername.Size = new System.Drawing.Size(161, 20);
+            this.tbUsername.TabIndex = 0;
+            this.tbUsername.Text = "Anone";
+            // 
+            // lUserName
+            // 
+            this.lUserName.AutoSize = true;
+            this.lUserName.Location = new System.Drawing.Point(3, 39);
+            this.lUserName.Name = "lUserName";
+            this.lUserName.Size = new System.Drawing.Size(58, 13);
+            this.lUserName.TabIndex = 1;
+            this.lUserName.Text = "Username:";
+            // 
             // gbStyle
             // 
             this.gbStyle.Controls.Add(this.rbLight);
@@ -228,46 +275,6 @@
             this.rbDark.Text = "Dark Mode";
             this.rbDark.UseVisualStyleBackColor = true;
             this.rbDark.CheckedChanged += new System.EventHandler(this.rbDark_CheckedChanged);
-            // 
-            // tbUserName
-            // 
-            this.tbUserName.Location = new System.Drawing.Point(6, 55);
-            this.tbUserName.Name = "tbUserName";
-            this.tbUserName.Size = new System.Drawing.Size(161, 20);
-            this.tbUserName.TabIndex = 0;
-            // 
-            // lUserName
-            // 
-            this.lUserName.AutoSize = true;
-            this.lUserName.Location = new System.Drawing.Point(3, 39);
-            this.lUserName.Name = "lUserName";
-            this.lUserName.Size = new System.Drawing.Size(58, 13);
-            this.lUserName.TabIndex = 1;
-            this.lUserName.Text = "Username:";
-            // 
-            // gbIdentity
-            // 
-            this.gbIdentity.Controls.Add(this.cbReveal);
-            this.gbIdentity.Controls.Add(this.tbUserName);
-            this.gbIdentity.Controls.Add(this.lUserName);
-            this.gbIdentity.Location = new System.Drawing.Point(6, 72);
-            this.gbIdentity.Name = "gbIdentity";
-            this.gbIdentity.Size = new System.Drawing.Size(173, 82);
-            this.gbIdentity.TabIndex = 6;
-            this.gbIdentity.TabStop = false;
-            this.gbIdentity.Text = "Identity";
-            // 
-            // cbReveal
-            // 
-            this.cbReveal.AutoSize = true;
-            this.cbReveal.Checked = true;
-            this.cbReveal.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbReveal.Location = new System.Drawing.Point(6, 19);
-            this.cbReveal.Name = "cbReveal";
-            this.cbReveal.Size = new System.Drawing.Size(111, 17);
-            this.cbReveal.TabIndex = 2;
-            this.cbReveal.Text = "Reveal Username";
-            this.cbReveal.UseVisualStyleBackColor = true;
             // 
             // gbStylization
             // 
@@ -323,10 +330,10 @@
             this.Text = "Crab Client";
             ((System.ComponentModel.ISupportInitialize)(this.nudPort)).EndInit();
             this.gbSettings.ResumeLayout(false);
-            this.gbStyle.ResumeLayout(false);
-            this.gbStyle.PerformLayout();
             this.gbIdentity.ResumeLayout(false);
             this.gbIdentity.PerformLayout();
+            this.gbStyle.ResumeLayout(false);
+            this.gbStyle.PerformLayout();
             this.gbStylization.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -353,7 +360,7 @@
         private System.Windows.Forms.RadioButton rbDark;
         private System.Windows.Forms.RadioButton rbLight;
         private System.Windows.Forms.Label lUserName;
-        private System.Windows.Forms.TextBox tbUserName;
+        private System.Windows.Forms.TextBox tbUsername;
         private System.Windows.Forms.GroupBox gbStyle;
         private System.Windows.Forms.GroupBox gbIdentity;
         private System.Windows.Forms.CheckBox cbReveal;
