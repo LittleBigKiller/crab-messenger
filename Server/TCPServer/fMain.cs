@@ -121,17 +121,18 @@ namespace TCPServer
                 string messageRecieved;
                 while ((messageRecieved = reading.ReadString()) != "END")
                 {
-                    messageRecieved = messageRecieved.Replace("<", "&lt;");
-                    messageRecieved = messageRecieved.Replace(">", "&gt;");
+                    //messageRecieved = messageRecieved.Replace("<", "&lt;");
+                    //messageRecieved = messageRecieved.Replace(">", "&gt;");
                     //this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageRecieved)));
-                    this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now + "<br>" + "Anon: " + messageRecieved + "<br><hr></div>"));
+                    //this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now + "<br>" + "Anon: " + messageRecieved + "<br><hr></div>"));
+                    displayMessage(messageRecieved);
                 }
                 client.Close();
                 server.Stop();
             }
             catch
             {
-                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Client closed connection unexpectedly")));
+                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Client closed connection unexpectedly R")));
                 this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("")));
                 this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Server stopped ...")));
                 if (client != null)
@@ -157,8 +158,6 @@ namespace TCPServer
                 string json = JsonConvert.SerializeObject(product);
 
                 string messageSent = json; //tbMessage.Text;
-                //messageSent = messageSent.Replace("<", "&lt;");
-                //messageSent = messageSent.Replace(">", "&gt;");
                 writing.Write(messageSent);
                 displayMessage(messageSent);
                 //wbMessage.DocumentText += "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now + "<br>" + product.UName + ": " + product.Message + "<br><hr></div>";
@@ -166,7 +165,7 @@ namespace TCPServer
             catch (Exception ex)
             {
                 lbLogger.Items.Add("");
-                lbLogger.Items.Add("Client closed connection unexpectedly");
+                lbLogger.Items.Add("Client closed connection unexpectedly W");
                 //lbLogger.Items.Add("Server stopped ...");
                 if (client != null)
                 {
@@ -203,23 +202,23 @@ namespace TCPServer
 
         private void displayMessage(string messageBlock)
         {
-            lbLogger.Items.Add(messageBlock);
+            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageBlock)));
             MessageObject product = JsonConvert.DeserializeObject<MessageObject>(messageBlock);
-            lbLogger.Items.Add("UName = " + product.uName);
-            lbLogger.Items.Add("UMsg = " + product.uMsg);
+            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("UName = " + product.uName)));
+            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("UMsg = " + product.uMsg)));
 
             string message = product.uMsg;
             message = message.Replace("<", "&lt;");
             message = message.Replace(">", "&gt;");
 
             message = CommonMarkConverter.Convert(message);
-            lbLogger.Items.Add("message = " + message);
+            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("message = " + message)));
 
             message = message.Replace("<p>", "");
             message = message.Replace("</p>", "");
-            lbLogger.Items.Add("message = " + message);
+            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("message = " + message)));
 
-            wbMessage.DocumentText += "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now + "<br>" + product.uName + ": " + message + "<br><hr></div>";
+            this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now + "<br>" + product.uName + ": " + message + "<br><hr></div>"));
         }
     }
 

@@ -82,6 +82,7 @@
             this.tbAddress.Name = "tbAddress";
             this.tbAddress.Size = new System.Drawing.Size(140, 20);
             this.tbAddress.TabIndex = 2;
+            this.tbAddress.Text = "127.0.0.1";
             // 
             // lbLogger
             // 
@@ -113,6 +114,11 @@
             this.nudPort.Name = "nudPort";
             this.nudPort.Size = new System.Drawing.Size(140, 20);
             this.nudPort.TabIndex = 7;
+            this.nudPort.Value = new decimal(new int[] {
+            5555,
+            0,
+            0,
+            0});
             // 
             // bwConnection
             // 
