@@ -18,6 +18,14 @@ namespace TCPServer
 {
     public partial class fMain : Form
     {
+        // Może się przydać:
+        // https://stackoverflow.com/questions/43431196/c-sharp-tcp-ip-simple-chat-with-multiple-clients
+        //
+
+        //  Potencjalne zastosowanie:
+        //  
+        //
+
         private TcpListener server = null;
         private TcpClient client = null;
         private BinaryWriter writing = null;
