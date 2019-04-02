@@ -137,7 +137,6 @@ namespace TCPClient
 
             string messageSent = json;
             writing.Write(messageSent);
-            displayMessage(messageSent);
         }
 
         private void btBold_Click(object sender, EventArgs e)
