@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CommonMark;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -28,7 +30,11 @@ namespace TCPClient
         private void bConnect_Click(object sender, EventArgs e)
         {
             lbLogger.Items.Add("Attempting connection ...");
-            bwConnection.RunWorkerAsync();
+            //if (bwConnection.IsBusy)
+            //{
+                
+                bwConnection.RunWorkerAsync();
+           // }
         }
 
         private void bDisconnect_Click(object sender, EventArgs e)
@@ -73,7 +79,7 @@ namespace TCPClient
                 NetworkStream ns = client.GetStream();
                 reading = new BinaryReader(ns);
                 writing = new BinaryWriter(ns);
-                writing.Write("password");
+                writing.Write(tbPass.Text);
                 activeCall = true;
                 bwMessages.RunWorkerAsync();
                 this.Invoke((MethodInvoker)(() => bConnect.Enabled = false));
@@ -100,7 +106,9 @@ namespace TCPClient
                 string messageRecieved;
                 while ((messageRecieved = reading.ReadString()) != "END")
                 {
-                    this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageRecieved)));
+                    //this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += "<div style=\"width:350px; word-wrap:break-word;\">" + DateTime.Now + "<br>" + "Anon: " + messageRecieved + "<br><hr></div>"));
+                    //this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageRecieved)));
+                    displayMessage(messageRecieved);
                 }
                 client.Close();
                 bwConnection.CancelAsync();
@@ -120,8 +128,87 @@ namespace TCPClient
 
         private void bSend_Click(object sender, EventArgs e)
         {
-            string messageSent = tbMessage.Text;
+            string uColor = "rgb(" + nudUserColorRed.Value + "," + nudUserColorGreen.Value + "," + nudUserColorBlue.Value + ")";
+            string msgColor = "rgb(" + nudMessageColorRed.Value + "," + nudMessageColorGreen.Value + "," + nudMessageColorBlue.Value + ")";
+
+            MessageObject product = new MessageObject(tbUsername.Text, tbMessage.Text, uColor, msgColor);
+
+            string json = JsonConvert.SerializeObject(product);
+
+            string messageSent = json;
             writing.Write(messageSent);
+        }
+
+        private void btBold_Click(object sender, EventArgs e)
+        {
+            tbMessage.Text += "<b></b>";
+        }
+
+        private void btItalic_Click(object sender, EventArgs e)
+        {
+            tbMessage.Text += "<i></i>";
+        }
+
+        private void rbDark_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbDark.Checked)
+            {
+                this.BackColor = SystemColors.ControlDark;
+            }
+        }
+
+        private void rbLight_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbLight.Checked)
+            {
+                this.BackColor = SystemColors.Control;
+            }
+        }
+
+        private void displayMessage(string messageBlock)
+        {
+            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageBlock)));
+            MessageObject product = JsonConvert.DeserializeObject<MessageObject>(messageBlock);
+            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("UName = " + product.uName)));
+            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("UMsg = " + product.uMsg)));
+
+            string message = product.uMsg;
+            message = message.Replace("<", "&lt;");
+            message = message.Replace(">", "&gt;");
+
+            message = CommonMarkConverter.Convert(message);
+            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("message = " + message)));
+
+            message = message.Replace("<p>", "");
+            message = message.Replace("</p>", "");
+            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("message = " + message)));
+
+            this.Invoke((MethodInvoker)(() => wbMessage.DocumentText +=
+            "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now +
+            "<br><div  style=\"display: inline; color: " + product.uColor + "\">" +
+            product.uName + ": </div><div style=\"display: inline; color: " + product.msgColor +
+            "\">"   + message + "</div><br><hr></div>"));
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+    }
+
+    internal class MessageObject
+    {
+        public readonly string uName;
+        public readonly string uMsg;
+        public readonly string msgColor;
+        public readonly string uColor;
+        
+        public MessageObject(string uname, string umsg, string msgcolor, string ucolor)
+        {
+            uName = uname;
+            uMsg = umsg;
+            msgColor = msgcolor;
+            uColor = ucolor;
         }
     }
 }
