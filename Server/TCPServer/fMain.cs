@@ -22,9 +22,10 @@ namespace TCPServer
         // https://stackoverflow.com/questions/43431196/c-sharp-tcp-ip-simple-chat-with-multiple-clients
         //
 
-        //  Potencjalne zastosowanie:
-        //  
-        //
+        static readonly object _lock = new object();
+        static readonly Dictionary<int, TcpClient> list_clients = new Dictionary<int, TcpClient>();
+
+        // Sprawdzone
 
         private TcpListener server = null;
         private TcpClient client = null;
@@ -55,7 +56,7 @@ namespace TCPServer
                 client = null;
                 lbLogger.Items.Add("Closed all connections");
             }
-            server.Stop();
+            //server.Stop();
             bwConnection.CancelAsync();
             bStart.Enabled = true;
             bStop.Enabled = false;
@@ -64,6 +65,7 @@ namespace TCPServer
 
         private void bwConnection_DoWork(object sender, DoWorkEventArgs e)
         {
+            int count = 1;
             IPAddress serverIP = null;
 
             try
@@ -92,6 +94,18 @@ namespace TCPServer
                 {
                     server.Start();
                     this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Server is listening on [" + serverIP.ToString() + ":" + port.ToString() + "]")));
+
+                    while (true)
+                    {
+                        TcpClient client = server.AcceptTcpClient();
+                        lock (_lock) list_clients.Add(count, client);
+                        this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Someone connected!!")));
+
+                        Thread t = new Thread(handle_clients);
+                        t.Start(count);
+                        count++;
+                    }
+
                     client = server.AcceptTcpClient();
                     NetworkStream ns = client.GetStream();
                     reading = new BinaryReader(ns);
@@ -120,6 +134,62 @@ namespace TCPServer
                 this.Invoke((MethodInvoker)(() => bStart.Enabled = true));
                 this.Invoke((MethodInvoker)(() => bStop.Enabled = false));
             }
+            //IPAddress serverIP = null;
+
+            //try
+            //{
+            //    serverIP = IPAddress.Parse(tbAddress.Text);
+            //}
+            //catch
+            //{
+            //    this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Error: Wrong IP Address format")));
+            //    this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Server stopping ...")));
+            //    this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("")));
+            //    this.Invoke((MethodInvoker)(() => tbAddress.Text = String.Empty));
+            //    this.Invoke((MethodInvoker)(() => bStart.Enabled = true));
+            //    this.Invoke((MethodInvoker)(() => bStop.Enabled = false));
+            //    this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
+            //    MessageBox.Show("Wrong IP Address format!", "Error");
+            //    return;
+            //}
+
+            //ushort port = Convert.ToUInt16(nudPort.Value);
+
+            //try
+            //{
+            //    server = new TcpListener(serverIP, port);
+            //    try
+            //    {
+            //        server.Start();
+            //        this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Server is listening on [" + serverIP.ToString() + ":" + port.ToString() + "]")));
+            //        client = server.AcceptTcpClient();
+            //        NetworkStream ns = client.GetStream();
+            //        reading = new BinaryReader(ns);
+            //        writing = new BinaryWriter(ns);
+            //        if (reading.ReadString() == tbPassword.Text)
+            //        {
+            //            bwMessages.RunWorkerAsync();
+            //        }
+            //        else
+            //        {
+            //            client.Close();
+            //            server.Stop();
+            //        }
+            //    }
+            //    catch
+            //    {
+            //    }
+
+            //    IPEndPoint clientIP = (IPEndPoint)client.Client.RemoteEndPoint;
+            //    this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: Client connected")));
+            //}
+            //catch
+            //{
+            //    this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("No connections to close")));
+            //    this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("")));
+            //    this.Invoke((MethodInvoker)(() => bStart.Enabled = true));
+            //    this.Invoke((MethodInvoker)(() => bStop.Enabled = false));
+            //}
         }
 
         private void bwMessages_DoWork(object sender, DoWorkEventArgs e)
@@ -228,6 +298,51 @@ namespace TCPServer
 
             this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now + "<br>" + product.uName + ": " + message + "<br><hr></div>"));
         }
+
+        #region NWM
+        public void handle_clients(object o)
+        {
+            int id = (int)o;
+            TcpClient client;
+
+            lock (_lock) client = list_clients[id];
+
+            while (true)
+            {
+                NetworkStream stream = client.GetStream();
+                byte[] buffer = new byte[1024];
+                int byte_count = stream.Read(buffer, 0, buffer.Length);
+
+                if (byte_count == 0)
+                {
+                    break;
+                }
+
+                string data = Encoding.ASCII.GetString(buffer, 0, byte_count);
+                broadcast(data);
+                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(data)));
+            }
+
+            lock (_lock) list_clients.Remove(id);
+            client.Client.Shutdown(SocketShutdown.Both);
+            client.Close();
+        }
+
+        public static void broadcast(string data)
+        {
+            byte[] buffer = Encoding.ASCII.GetBytes(data + Environment.NewLine);
+
+            lock (_lock)
+            {
+                foreach (TcpClient c in list_clients.Values)
+                {
+                    NetworkStream stream = c.GetStream();
+
+                    stream.Write(buffer, 0, buffer.Length);
+                }
+            }
+        }
+        #endregion
     }
 
     internal class MessageObject
@@ -240,5 +355,18 @@ namespace TCPServer
             uName = uname;
             uMsg = umsg;
         }
+    }
+
+    internal class ClientBox
+    {
+        public TcpClient c;
+        public Dictionary<int, TcpClient> list;
+
+        public ClientBox(TcpClient c, Dictionary<int, TcpClient> list)
+        {
+            this.c = c;
+            this.list = list;
+        }
+
     }
 }

@@ -29,8 +29,11 @@ namespace TCPClient
 
         private void bConnect_Click(object sender, EventArgs e)
         {
-            lbLogger.Items.Add("Attempting connection ...");
-            bwConnection.RunWorkerAsync();
+            if (!bwConnection.IsBusy)
+            {
+                lbLogger.Items.Add("Attempting connection ...");
+                bwConnection.RunWorkerAsync();
+            }
         }
 
         private void bDisconnect_Click(object sender, EventArgs e)
@@ -77,7 +80,20 @@ namespace TCPClient
                 writing = new BinaryWriter(ns);
                 writing.Write(tbPass.Text);
                 activeCall = true;
-                bwMessages.RunWorkerAsync();
+
+
+                while (true)
+                {
+                    TcpClient client = ServerSocket.AcceptTcpClient();
+                    lock (_lock) list_clients.Add(count, client);
+                    this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Someone connected!!")));
+
+                    Thread t = new Thread(handle_clients);
+                    t.Start(count);
+                    count++;
+                }
+
+
                 this.Invoke((MethodInvoker)(() => bConnect.Enabled = false));
                 this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = true));
                 this.Invoke((MethodInvoker)(() => bSend.Enabled = true));
