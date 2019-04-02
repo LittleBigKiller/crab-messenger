@@ -18,18 +18,10 @@ namespace TCPServer
 {
     public partial class fMain : Form
     {
-        // Może się przydać:
-        // https://stackoverflow.com/questions/43431196/c-sharp-tcp-ip-simple-chat-with-multiple-clients
-        //
-
         static readonly object _lock = new object();
         static readonly Dictionary<int, TcpClient> list_clients = new Dictionary<int, TcpClient>();
 
-        // Sprawdzone
-
         private TcpListener server = null;
-        private BinaryWriter writing = null;
-        private BinaryReader reading = null;
 
         public fMain()
         {
@@ -48,18 +40,24 @@ namespace TCPServer
 
         private void bStop_Click(object sender, EventArgs e)
         {
-            //lbLogger.Items.Add("Server stopped ...");
+            lbLogger.Items.Add("Server stopped ...");
             //if (client != null)
             //{
             //    client.Close();
             //    client = null;
             //    lbLogger.Items.Add("Closed all connections");
             //}
-            ////server.Stop();
-            //bwConnection.CancelAsync();
-            //bStart.Enabled = true;
-            //bStop.Enabled = false;
-            //bSend.Enabled = false;
+            foreach (KeyValuePair<int, TcpClient> entry in list_clients)
+            {
+                entry.Value.Client.Shutdown(SocketShutdown.Both);
+                entry.Value.Close();
+            }
+
+            server.Stop();
+            bwConnection.CancelAsync();
+            bStart.Enabled = true;
+            bStop.Enabled = false;
+            bSend.Enabled = false;
         }
 
         private void bwConnection_DoWork(object sender, DoWorkEventArgs e)
@@ -97,16 +95,30 @@ namespace TCPServer
                     while (true)
                     {
                         TcpClient client = server.AcceptTcpClient();
-                        lock (_lock) list_clients.Add(count, client);
-                        
+
+                        BinaryReader reader = new BinaryReader(client.GetStream());
+
                         IPEndPoint clientIP = (IPEndPoint)client.Client.RemoteEndPoint;
-                        this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: Client connected")));
+                        this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: Attempting connection ...")));
 
-                        //this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Someone connected!!")));
+                        if (reader.ReadString() == tbPassword.Text)
+                        {
+                            lock (_lock) list_clients.Add(count, client);
+                            
+                            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: Client connected")));
 
-                        Thread t = new Thread(handle_clients);
-                        t.Start(count);
-                        count++;
+                            Thread t = new Thread(handle_clients);
+                            t.IsBackground = true;
+                            t.Start(count);
+                            count++;
+                        }
+                        else
+                        {
+                            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: Incorrect password, dropping")));
+                            client.Client.Shutdown(SocketShutdown.Both);
+                            client.Close();
+                        }
+                        
                     }
                 }
                 catch
@@ -222,7 +234,7 @@ namespace TCPServer
             this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now + "<br>" + product.uName + ": " + message + "<br><hr></div>"));
         }
 
-        #region NWM
+        #region Połączenie Nowe
         public void handle_clients(object o)
         {
             int id = (int)o;
@@ -256,8 +268,15 @@ namespace TCPServer
             
 
             lock (_lock) list_clients.Remove(id);
-            client.Client.Shutdown(SocketShutdown.Both);
-            client.Close();
+            try // Mogą być już usunięte
+            {
+                client.Client.Shutdown(SocketShutdown.Both);
+                client.Close();
+            }
+            catch
+            {
+
+            }
         }
 
         public void broadcast(string data)
