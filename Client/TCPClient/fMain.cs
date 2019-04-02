@@ -80,20 +80,7 @@ namespace TCPClient
                 writing = new BinaryWriter(ns);
                 writing.Write(tbPass.Text);
                 activeCall = true;
-
-
-                while (true)
-                {
-                    TcpClient client = ServerSocket.AcceptTcpClient();
-                    lock (_lock) list_clients.Add(count, client);
-                    this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Someone connected!!")));
-
-                    Thread t = new Thread(handle_clients);
-                    t.Start(count);
-                    count++;
-                }
-
-
+                bwMessages.RunWorkerAsync();
                 this.Invoke((MethodInvoker)(() => bConnect.Enabled = false));
                 this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = true));
                 this.Invoke((MethodInvoker)(() => bSend.Enabled = true));
@@ -119,8 +106,15 @@ namespace TCPClient
                 while ((messageRecieved = reading.ReadString()) != "END")
                 {
                     //this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += "<div style=\"width:350px; word-wrap:break-word;\">" + DateTime.Now + "<br>" + "Anon: " + messageRecieved + "<br><hr></div>"));
-                    //this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageRecieved)));
-                    displayMessage(messageRecieved);
+                    this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Recieved: " + messageRecieved)));
+                    try
+                    {
+                        displayMessage(messageRecieved);
+                    }
+                    catch
+                    {
+                        this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Message droppped")));
+                    }
                 }
                 client.Close();
                 bwConnection.CancelAsync();
@@ -130,7 +124,7 @@ namespace TCPClient
             }
             catch (Exception ex)
             {
-                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Connection closed unexpectedly")));
+                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Connection closed unexpectedly R")));
                 this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("")));
                 this.Invoke((MethodInvoker)(() => bConnect.Enabled = true));
                 this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = false));
@@ -149,7 +143,7 @@ namespace TCPClient
 
             string messageSent = json; //tbMessage.Text;
             writing.Write(messageSent);
-            displayMessage(messageSent);
+            //displayMessage(messageSent);
         }
 
         private void btBold_Click(object sender, EventArgs e)
