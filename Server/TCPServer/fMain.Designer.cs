@@ -43,19 +43,42 @@
             this.gbSettingsChat = new System.Windows.Forms.GroupBox();
             this.cbSettingsUsername = new System.Windows.Forms.CheckBox();
             this.lSettingsUsername = new System.Windows.Forms.Label();
-            this.tbSettingsUsername = new System.Windows.Forms.TextBox();
+            this.tbUsername = new System.Windows.Forms.TextBox();
             this.gbSettingsStyle = new System.Windows.Forms.GroupBox();
             this.rbSettingsStyle1 = new System.Windows.Forms.RadioButton();
             this.rbSettingsStyle0 = new System.Windows.Forms.RadioButton();
             this.lMessage = new System.Windows.Forms.Label();
-            this.gbMessage = new System.Windows.Forms.GroupBox();
             this.bStart = new System.Windows.Forms.Button();
             this.lPassword = new System.Windows.Forms.Label();
             this.tbPassword = new System.Windows.Forms.TextBox();
+            this.gbStylization = new System.Windows.Forms.GroupBox();
+            this.gbUserColor = new System.Windows.Forms.GroupBox();
+            this.lUserColorBlue = new System.Windows.Forms.Label();
+            this.lUserColorGreen = new System.Windows.Forms.Label();
+            this.lUserColorRed = new System.Windows.Forms.Label();
+            this.nudUserColorBlue = new System.Windows.Forms.NumericUpDown();
+            this.nudUserColorGreen = new System.Windows.Forms.NumericUpDown();
+            this.nudUserColorRed = new System.Windows.Forms.NumericUpDown();
+            this.gbMessageColor = new System.Windows.Forms.GroupBox();
+            this.lMessageColorBlue = new System.Windows.Forms.Label();
+            this.lMessageColorGreen = new System.Windows.Forms.Label();
+            this.lMessageColorRed = new System.Windows.Forms.Label();
+            this.nudMessageColorBlue = new System.Windows.Forms.NumericUpDown();
+            this.nudMessageColorGreen = new System.Windows.Forms.NumericUpDown();
+            this.nudMessageColorRed = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.nudPort)).BeginInit();
             this.gbSettings.SuspendLayout();
             this.gbSettingsChat.SuspendLayout();
             this.gbSettingsStyle.SuspendLayout();
+            this.gbStylization.SuspendLayout();
+            this.gbUserColor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudUserColorBlue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudUserColorGreen)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudUserColorRed)).BeginInit();
+            this.gbMessageColor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorBlue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorGreen)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorRed)).BeginInit();
             this.SuspendLayout();
             // 
             // lAddress
@@ -171,7 +194,7 @@
             // 
             this.gbSettingsChat.Controls.Add(this.cbSettingsUsername);
             this.gbSettingsChat.Controls.Add(this.lSettingsUsername);
-            this.gbSettingsChat.Controls.Add(this.tbSettingsUsername);
+            this.gbSettingsChat.Controls.Add(this.tbUsername);
             this.gbSettingsChat.Location = new System.Drawing.Point(8, 66);
             this.gbSettingsChat.Name = "gbSettingsChat";
             this.gbSettingsChat.Size = new System.Drawing.Size(168, 82);
@@ -200,13 +223,13 @@
             this.lSettingsUsername.TabIndex = 13;
             this.lSettingsUsername.Text = "Username";
             // 
-            // tbSettingsUsername
+            // tbUsername
             // 
-            this.tbSettingsUsername.Location = new System.Drawing.Point(6, 55);
-            this.tbSettingsUsername.Name = "tbSettingsUsername";
-            this.tbSettingsUsername.Size = new System.Drawing.Size(156, 20);
-            this.tbSettingsUsername.TabIndex = 13;
-            this.tbSettingsUsername.Text = "Anon";
+            this.tbUsername.Location = new System.Drawing.Point(6, 55);
+            this.tbUsername.Name = "tbUsername";
+            this.tbUsername.Size = new System.Drawing.Size(156, 20);
+            this.tbUsername.TabIndex = 13;
+            this.tbUsername.Text = "Anon";
             // 
             // gbSettingsStyle
             // 
@@ -253,15 +276,6 @@
             this.lMessage.TabIndex = 12;
             this.lMessage.Text = "Message Log";
             // 
-            // gbMessage
-            // 
-            this.gbMessage.Location = new System.Drawing.Point(418, 249);
-            this.gbMessage.Name = "gbMessage";
-            this.gbMessage.Size = new System.Drawing.Size(182, 302);
-            this.gbMessage.TabIndex = 13;
-            this.gbMessage.TabStop = false;
-            this.gbMessage.Text = "Message Stylization";
-            // 
             // bStart
             // 
             this.bStart.Location = new System.Drawing.Point(11, 32);
@@ -290,15 +304,182 @@
             this.tbPassword.TabIndex = 16;
             this.tbPassword.Text = "zaq1@WSX";
             // 
+            // gbStylization
+            // 
+            this.gbStylization.Controls.Add(this.gbUserColor);
+            this.gbStylization.Controls.Add(this.gbMessageColor);
+            this.gbStylization.Location = new System.Drawing.Point(418, 249);
+            this.gbStylization.Name = "gbStylization";
+            this.gbStylization.Size = new System.Drawing.Size(182, 282);
+            this.gbStylization.TabIndex = 17;
+            this.gbStylization.TabStop = false;
+            this.gbStylization.Text = "Message Stylization";
+            // 
+            // gbUserColor
+            // 
+            this.gbUserColor.Controls.Add(this.lUserColorBlue);
+            this.gbUserColor.Controls.Add(this.lUserColorGreen);
+            this.gbUserColor.Controls.Add(this.lUserColorRed);
+            this.gbUserColor.Controls.Add(this.nudUserColorBlue);
+            this.gbUserColor.Controls.Add(this.nudUserColorGreen);
+            this.gbUserColor.Controls.Add(this.nudUserColorRed);
+            this.gbUserColor.Location = new System.Drawing.Point(12, 153);
+            this.gbUserColor.Name = "gbUserColor";
+            this.gbUserColor.Size = new System.Drawing.Size(164, 113);
+            this.gbUserColor.TabIndex = 13;
+            this.gbUserColor.TabStop = false;
+            this.gbUserColor.Text = "Username Color";
+            // 
+            // lUserColorBlue
+            // 
+            this.lUserColorBlue.AutoSize = true;
+            this.lUserColorBlue.Location = new System.Drawing.Point(6, 73);
+            this.lUserColorBlue.Name = "lUserColorBlue";
+            this.lUserColorBlue.Size = new System.Drawing.Size(28, 13);
+            this.lUserColorBlue.TabIndex = 5;
+            this.lUserColorBlue.Text = "Blue";
+            // 
+            // lUserColorGreen
+            // 
+            this.lUserColorGreen.AutoSize = true;
+            this.lUserColorGreen.Location = new System.Drawing.Point(6, 47);
+            this.lUserColorGreen.Name = "lUserColorGreen";
+            this.lUserColorGreen.Size = new System.Drawing.Size(36, 13);
+            this.lUserColorGreen.TabIndex = 4;
+            this.lUserColorGreen.Text = "Green";
+            // 
+            // lUserColorRed
+            // 
+            this.lUserColorRed.AutoSize = true;
+            this.lUserColorRed.Location = new System.Drawing.Point(6, 21);
+            this.lUserColorRed.Name = "lUserColorRed";
+            this.lUserColorRed.Size = new System.Drawing.Size(27, 13);
+            this.lUserColorRed.TabIndex = 3;
+            this.lUserColorRed.Text = "Red";
+            // 
+            // nudUserColorBlue
+            // 
+            this.nudUserColorBlue.Location = new System.Drawing.Point(63, 71);
+            this.nudUserColorBlue.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudUserColorBlue.Name = "nudUserColorBlue";
+            this.nudUserColorBlue.Size = new System.Drawing.Size(95, 20);
+            this.nudUserColorBlue.TabIndex = 2;
+            // 
+            // nudUserColorGreen
+            // 
+            this.nudUserColorGreen.Location = new System.Drawing.Point(63, 45);
+            this.nudUserColorGreen.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudUserColorGreen.Name = "nudUserColorGreen";
+            this.nudUserColorGreen.Size = new System.Drawing.Size(95, 20);
+            this.nudUserColorGreen.TabIndex = 1;
+            // 
+            // nudUserColorRed
+            // 
+            this.nudUserColorRed.Location = new System.Drawing.Point(63, 19);
+            this.nudUserColorRed.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudUserColorRed.Name = "nudUserColorRed";
+            this.nudUserColorRed.Size = new System.Drawing.Size(95, 20);
+            this.nudUserColorRed.TabIndex = 0;
+            // 
+            // gbMessageColor
+            // 
+            this.gbMessageColor.Controls.Add(this.lMessageColorBlue);
+            this.gbMessageColor.Controls.Add(this.lMessageColorGreen);
+            this.gbMessageColor.Controls.Add(this.lMessageColorRed);
+            this.gbMessageColor.Controls.Add(this.nudMessageColorBlue);
+            this.gbMessageColor.Controls.Add(this.nudMessageColorGreen);
+            this.gbMessageColor.Controls.Add(this.nudMessageColorRed);
+            this.gbMessageColor.Location = new System.Drawing.Point(12, 34);
+            this.gbMessageColor.Name = "gbMessageColor";
+            this.gbMessageColor.Size = new System.Drawing.Size(164, 113);
+            this.gbMessageColor.TabIndex = 12;
+            this.gbMessageColor.TabStop = false;
+            this.gbMessageColor.Text = "Message Color";
+            // 
+            // lMessageColorBlue
+            // 
+            this.lMessageColorBlue.AutoSize = true;
+            this.lMessageColorBlue.Location = new System.Drawing.Point(6, 73);
+            this.lMessageColorBlue.Name = "lMessageColorBlue";
+            this.lMessageColorBlue.Size = new System.Drawing.Size(28, 13);
+            this.lMessageColorBlue.TabIndex = 5;
+            this.lMessageColorBlue.Text = "Blue";
+            // 
+            // lMessageColorGreen
+            // 
+            this.lMessageColorGreen.AutoSize = true;
+            this.lMessageColorGreen.Location = new System.Drawing.Point(6, 47);
+            this.lMessageColorGreen.Name = "lMessageColorGreen";
+            this.lMessageColorGreen.Size = new System.Drawing.Size(36, 13);
+            this.lMessageColorGreen.TabIndex = 4;
+            this.lMessageColorGreen.Text = "Green";
+            // 
+            // lMessageColorRed
+            // 
+            this.lMessageColorRed.AutoSize = true;
+            this.lMessageColorRed.Location = new System.Drawing.Point(6, 21);
+            this.lMessageColorRed.Name = "lMessageColorRed";
+            this.lMessageColorRed.Size = new System.Drawing.Size(27, 13);
+            this.lMessageColorRed.TabIndex = 3;
+            this.lMessageColorRed.Text = "Red";
+            // 
+            // nudMessageColorBlue
+            // 
+            this.nudMessageColorBlue.Location = new System.Drawing.Point(63, 71);
+            this.nudMessageColorBlue.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudMessageColorBlue.Name = "nudMessageColorBlue";
+            this.nudMessageColorBlue.Size = new System.Drawing.Size(95, 20);
+            this.nudMessageColorBlue.TabIndex = 2;
+            // 
+            // nudMessageColorGreen
+            // 
+            this.nudMessageColorGreen.Location = new System.Drawing.Point(63, 45);
+            this.nudMessageColorGreen.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudMessageColorGreen.Name = "nudMessageColorGreen";
+            this.nudMessageColorGreen.Size = new System.Drawing.Size(95, 20);
+            this.nudMessageColorGreen.TabIndex = 1;
+            // 
+            // nudMessageColorRed
+            // 
+            this.nudMessageColorRed.Location = new System.Drawing.Point(63, 19);
+            this.nudMessageColorRed.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudMessageColorRed.Name = "nudMessageColorRed";
+            this.nudMessageColorRed.Size = new System.Drawing.Size(95, 20);
+            this.nudMessageColorRed.TabIndex = 0;
+            // 
             // fMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(606, 563);
+            this.Controls.Add(this.gbStylization);
             this.Controls.Add(this.tbPassword);
             this.Controls.Add(this.lPassword);
             this.Controls.Add(this.bStart);
-            this.Controls.Add(this.gbMessage);
             this.Controls.Add(this.lMessage);
             this.Controls.Add(this.gbSettings);
             this.Controls.Add(this.wbMessage);
@@ -319,6 +500,17 @@
             this.gbSettingsChat.PerformLayout();
             this.gbSettingsStyle.ResumeLayout(false);
             this.gbSettingsStyle.PerformLayout();
+            this.gbStylization.ResumeLayout(false);
+            this.gbUserColor.ResumeLayout(false);
+            this.gbUserColor.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudUserColorBlue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudUserColorGreen)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudUserColorRed)).EndInit();
+            this.gbMessageColor.ResumeLayout(false);
+            this.gbMessageColor.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorBlue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorGreen)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorRed)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -342,14 +534,28 @@
         private System.Windows.Forms.GroupBox gbSettingsChat;
         private System.Windows.Forms.CheckBox cbSettingsUsername;
         private System.Windows.Forms.Label lSettingsUsername;
-        private System.Windows.Forms.TextBox tbSettingsUsername;
+        private System.Windows.Forms.TextBox tbUsername;
         private System.Windows.Forms.GroupBox gbSettingsStyle;
         private System.Windows.Forms.RadioButton rbSettingsStyle1;
         private System.Windows.Forms.RadioButton rbSettingsStyle0;
-        private System.Windows.Forms.GroupBox gbMessage;
         private System.Windows.Forms.Button bStart;
         private System.Windows.Forms.Label lPassword;
         private System.Windows.Forms.TextBox tbPassword;
+        private System.Windows.Forms.GroupBox gbStylization;
+        private System.Windows.Forms.GroupBox gbUserColor;
+        private System.Windows.Forms.Label lUserColorBlue;
+        private System.Windows.Forms.Label lUserColorGreen;
+        private System.Windows.Forms.Label lUserColorRed;
+        private System.Windows.Forms.NumericUpDown nudUserColorBlue;
+        private System.Windows.Forms.NumericUpDown nudUserColorGreen;
+        private System.Windows.Forms.NumericUpDown nudUserColorRed;
+        private System.Windows.Forms.GroupBox gbMessageColor;
+        private System.Windows.Forms.Label lMessageColorBlue;
+        private System.Windows.Forms.Label lMessageColorGreen;
+        private System.Windows.Forms.Label lMessageColorRed;
+        private System.Windows.Forms.NumericUpDown nudMessageColorBlue;
+        private System.Windows.Forms.NumericUpDown nudMessageColorGreen;
+        private System.Windows.Forms.NumericUpDown nudMessageColorRed;
     }
 }
 

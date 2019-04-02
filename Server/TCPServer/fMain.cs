@@ -169,7 +169,10 @@ namespace TCPServer
         {
             try
             {
-                MessageObject product = new MessageObject(tbSettingsUsername.Text, tbMessage.Text);
+                string uColor = "rgb(" + nudUserColorRed.Value + "," + nudUserColorGreen.Value + "," + nudUserColorBlue.Value + ")";
+                string msgColor = "rgb(" + nudMessageColorRed.Value + "," + nudMessageColorGreen.Value + "," + nudMessageColorBlue.Value + ")";
+
+                MessageObject product = new MessageObject(tbUsername.Text, tbMessage.Text, uColor, msgColor);
 
                 string json = JsonConvert.SerializeObject(product);
 
@@ -231,7 +234,11 @@ namespace TCPServer
             message = message.Replace("</p>", "");
             this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("message = " + message)));
 
-            this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now + "<br>" + product.uName + ": " + message + "<br><hr></div>"));
+            this.Invoke((MethodInvoker)(() => wbMessage.DocumentText +=
+            "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now +
+            "<br><div  style=\"display: inline; color: " + product.uColor + "\">" +
+            product.uName + ": </div><div style=\"display: inline; color: " + product.msgColor +
+            "\">" + message + "</div><br><hr></div>"));
         }
 
         #region Połączenie Nowe
@@ -304,11 +311,15 @@ namespace TCPServer
     {
         public readonly string uName;
         public readonly string uMsg;
+        public readonly string msgColor;
+        public readonly string uColor;
 
-        public MessageObject(string uname, string umsg)
+        public MessageObject(string uname, string umsg, string msgcolor, string ucolor)
         {
             uName = uname;
             uMsg = umsg;
+            msgColor = msgcolor;
+            uColor = ucolor;
         }
     }
 

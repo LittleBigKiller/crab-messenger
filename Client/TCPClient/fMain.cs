@@ -128,14 +128,14 @@ namespace TCPClient
 
         private void bSend_Click(object sender, EventArgs e)
         {
-            string uColor = nudUserColorRed.Value + "," + nudUserColorGreen.Value + "," + nudUserColorBlue.Value;
-            string msgColor = nudMessageColorRed.Value + "," + nudMessageColorGreen.Value + "," + nudMessageColorBlue.Value;
+            string uColor = "rgb(" + nudUserColorRed.Value + "," + nudUserColorGreen.Value + "," + nudUserColorBlue.Value + ")";
+            string msgColor = "rgb(" + nudMessageColorRed.Value + "," + nudMessageColorGreen.Value + "," + nudMessageColorBlue.Value + ")";
 
             MessageObject product = new MessageObject(tbUsername.Text, tbMessage.Text, uColor, msgColor);
 
             string json = JsonConvert.SerializeObject(product);
 
-            string messageSent = json; //tbMessage.Text;
+            string messageSent = json;
             writing.Write(messageSent);
             displayMessage(messageSent);
         }
@@ -184,7 +184,11 @@ namespace TCPClient
             message = message.Replace("</p>", "");
             this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("message = " + message)));
 
-            this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now + "<br>" + product.uName + ": "   + message + "<br><hr></div>"));
+            this.Invoke((MethodInvoker)(() => wbMessage.DocumentText +=
+            "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now +
+            "<br><div  style=\"display: inline; color: " + product.uColor + "\">" +
+            product.uName + ": </div><div style=\"display: inline; color: " + product.msgColor +
+            "\">"   + message + "</div><br><hr></div>"));
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
