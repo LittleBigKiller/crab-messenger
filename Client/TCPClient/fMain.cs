@@ -29,11 +29,12 @@ namespace TCPClient
 
         private void bConnect_Click(object sender, EventArgs e)
         {
-            if (!bwConnection.IsBusy)
-            {
-                lbLogger.Items.Add("Attempting connection ...");
+            lbLogger.Items.Add("Attempting connection ...");
+            //if (bwConnection.IsBusy)
+            //{
+                
                 bwConnection.RunWorkerAsync();
-            }
+           // }
         }
 
         private void bDisconnect_Click(object sender, EventArgs e)
@@ -106,15 +107,8 @@ namespace TCPClient
                 while ((messageRecieved = reading.ReadString()) != "END")
                 {
                     //this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += "<div style=\"width:350px; word-wrap:break-word;\">" + DateTime.Now + "<br>" + "Anon: " + messageRecieved + "<br><hr></div>"));
-                    this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Recieved: " + messageRecieved)));
-                    try
-                    {
-                        displayMessage(messageRecieved);
-                    }
-                    catch
-                    {
-                        this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Message droppped")));
-                    }
+                    //this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageRecieved)));
+                    displayMessage(messageRecieved);
                 }
                 client.Close();
                 bwConnection.CancelAsync();
@@ -124,7 +118,7 @@ namespace TCPClient
             }
             catch (Exception ex)
             {
-                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Connection closed unexpectedly R")));
+                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Connection closed unexpectedly")));
                 this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("")));
                 this.Invoke((MethodInvoker)(() => bConnect.Enabled = true));
                 this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = false));
@@ -134,16 +128,16 @@ namespace TCPClient
 
         private void bSend_Click(object sender, EventArgs e)
         {
-            //string messageSent = tbMessage.Text;
-            //writing.Write(messageSent);
-            //wbMessage.DocumentText += "<div style=\"width:350px; word-wrap:break-word;\">" + DateTime.Now + "<br>" + "Me: " + messageSent + "<br><hr></div>";
-            MessageObject product = new MessageObject(tbUsername.Text, tbMessage.Text);
+            string uColor = nudUserColorRed.Value + "," + nudUserColorGreen.Value + "," + nudUserColorBlue.Value;
+            string msgColor = nudMessageColorRed.Value + "," + nudMessageColorGreen.Value + "," + nudMessageColorBlue.Value;
+
+            MessageObject product = new MessageObject(tbUsername.Text, tbMessage.Text, uColor, msgColor);
 
             string json = JsonConvert.SerializeObject(product);
 
             string messageSent = json; //tbMessage.Text;
             writing.Write(messageSent);
-            //displayMessage(messageSent);
+            displayMessage(messageSent);
         }
 
         private void btBold_Click(object sender, EventArgs e)
@@ -190,7 +184,12 @@ namespace TCPClient
             message = message.Replace("</p>", "");
             this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("message = " + message)));
 
-            this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now + "<br>" + product.uName + ": " + message + "<br><hr></div>"));
+            this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now + "<br>" + product.uName + ": "   + message + "<br><hr></div>"));
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 
@@ -198,11 +197,15 @@ namespace TCPClient
     {
         public readonly string uName;
         public readonly string uMsg;
-
-        public MessageObject(string uname, string umsg)
+        public readonly string msgColor;
+        public readonly string uColor;
+        
+        public MessageObject(string uname, string umsg, string msgcolor, string ucolor)
         {
             uName = uname;
             uMsg = umsg;
+            msgColor = msgcolor;
+            uColor = ucolor;
         }
     }
 }
