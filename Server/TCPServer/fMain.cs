@@ -134,37 +134,6 @@ namespace TCPServer
             }
         }
 
-        private void bwMessages_DoWork(object sender, DoWorkEventArgs e)
-        {
-        //    try
-        //    {
-        //        string messageRecieved;
-        //        while ((messageRecieved = reading.ReadString()) != "END")
-        //        {
-        //            displayMessage(messageRecieved);
-        //        }
-        //        client.Close();
-        //        server.Stop();
-        //    }
-        //    catch
-        //    {
-        //        this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Client closed connection unexpectedly R")));
-        //        this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("")));
-        //        this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Server stopped ...")));
-        //        if (client != null)
-        //        {
-        //            this.Invoke((MethodInvoker)(() => client.Close()));
-        //            this.Invoke((MethodInvoker)(() => client = null));
-        //            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Closed all connections")));
-        //        }
-        //        this.Invoke((MethodInvoker)(() => server.Stop()));
-        //        this.Invoke((MethodInvoker)(() => bwConnection.CancelAsync()));
-        //        this.Invoke((MethodInvoker)(() => bStart.Enabled = true));
-        //        this.Invoke((MethodInvoker)(() => bStop.Enabled = false));
-        //        this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
-        //    }
-        }
-
         private void bSend_Click(object sender, EventArgs e)
         {
             try
@@ -177,26 +146,25 @@ namespace TCPServer
                 string json = JsonConvert.SerializeObject(product);
 
                 string messageSent = json;
-                //writing.Write(messageSent);
                 displayMessage(messageSent);
                 broadcast(messageSent);
             }
-            catch (Exception ex)
+            catch //(Exception ex)
             {
-                lbLogger.Items.Add("");
-                lbLogger.Items.Add("Client closed connection unexpectedly W");
+                //lbLogger.Items.Add("");
+                //lbLogger.Items.Add("Client closed connection unexpectedly W");
                 //if (client != null)
                 //{
                 //    client.Close();
                 //    client = null;
                 //}
                 //server.Stop();
-                bwConnection.CancelAsync();
+                //bwConnection.CancelAsync();
                 //bStart.Enabled = true;
                 //bStop.Enabled = false;
                 //bSend.Enabled = false;
                 //bwConnection.RunWorkerAsync();
-                MessageBox.Show(ex.ToString());
+                //MessageBox.Show(ex.ToString());
             }
         }
 
@@ -232,6 +200,7 @@ namespace TCPServer
 
             message = message.Replace("<p>", "");
             message = message.Replace("</p>", "");
+            message = message.Replace("<img", "<img style=\"width: 300px\"");
             this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("message = " + message)));
 
             this.Invoke((MethodInvoker)(() => wbMessage.DocumentText +=
@@ -306,8 +275,7 @@ namespace TCPServer
         }
         #endregion
     }
-
-    internal class MessageObject
+        internal class MessageObject
     {
         public readonly string uName;
         public readonly string uMsg;

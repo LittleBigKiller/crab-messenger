@@ -37,7 +37,6 @@
             this.bwConnection = new System.ComponentModel.BackgroundWorker();
             this.tbMessage = new System.Windows.Forms.TextBox();
             this.bSend = new System.Windows.Forms.Button();
-            this.bwMessages = new System.ComponentModel.BackgroundWorker();
             this.wbMessage = new System.Windows.Forms.WebBrowser();
             this.gbSettings = new System.Windows.Forms.GroupBox();
             this.gbSettingsChat = new System.Windows.Forms.GroupBox();
@@ -165,11 +164,6 @@
             this.bSend.Text = "Send";
             this.bSend.UseVisualStyleBackColor = true;
             this.bSend.Click += new System.EventHandler(this.bSend_Click);
-            // 
-            // bwMessages
-            // 
-            this.bwMessages.WorkerSupportsCancellation = true;
-            this.bwMessages.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwMessages_DoWork);
             // 
             // wbMessage
             // 
@@ -527,7 +521,6 @@
         private System.ComponentModel.BackgroundWorker bwConnection;
         private System.Windows.Forms.TextBox tbMessage;
         private System.Windows.Forms.Button bSend;
-        private System.ComponentModel.BackgroundWorker bwMessages;
         private System.Windows.Forms.WebBrowser wbMessage;
         private System.Windows.Forms.GroupBox gbSettings;
         private System.Windows.Forms.Label lMessage;

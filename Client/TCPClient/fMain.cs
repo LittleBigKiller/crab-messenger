@@ -181,6 +181,7 @@ namespace TCPClient
 
             message = message.Replace("<p>", "");
             message = message.Replace("</p>", "");
+            message = message.Replace("<img", "<img style=\"width: 300px\"");
             this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("message = " + message)));
 
             this.Invoke((MethodInvoker)(() => wbMessage.DocumentText +=
