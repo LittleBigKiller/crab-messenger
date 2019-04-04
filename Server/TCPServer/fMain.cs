@@ -20,6 +20,8 @@ namespace TCPServer
     {
         static readonly object _lock = new object();
         static readonly Dictionary<int, TcpClient> list_clients = new Dictionary<int, TcpClient>();
+        IPAddress serverIP = null;
+        ushort port;
 
         private TcpListener server = null;
 
@@ -35,18 +37,12 @@ namespace TCPServer
             bStart.Enabled = false;
             bStop.Enabled = true;
             bSend.Enabled = true;
-            wbMessage.DocumentText = "";
+            wbMessage.DocumentText = "<body>";
         }
 
         private void bStop_Click(object sender, EventArgs e)
         {
             lbLogger.Items.Add("Server stopped ...");
-            //if (client != null)
-            //{
-            //    client.Close();
-            //    client = null;
-            //    lbLogger.Items.Add("Closed all connections");
-            //}
             foreach (KeyValuePair<int, TcpClient> entry in list_clients)
             {
                 entry.Value.Client.Shutdown(SocketShutdown.Both);
@@ -62,8 +58,8 @@ namespace TCPServer
 
         private void bwConnection_DoWork(object sender, DoWorkEventArgs e)
         {
-            int count = 1;
-            IPAddress serverIP = null;
+            int count = 0;
+            serverIP = null;
 
             try
             {
@@ -82,7 +78,7 @@ namespace TCPServer
                 return;
             }
 
-            ushort port = Convert.ToUInt16(nudPort.Value);
+            port = Convert.ToUInt16(nudPort.Value);
 
             try
             {
@@ -115,8 +111,22 @@ namespace TCPServer
                         else
                         {
                             this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: Incorrect password, dropping")));
+
+                            NetworkStream stream = client.GetStream();
+
+                            BinaryWriter writer = new BinaryWriter(stream);
+
+                            MessageObject product = new MessageObject("message", "[" + serverIP.ToString() + ":" + port.ToString() + "]", "Invalid credentials", "rgb(255, 0, 0)", "rgb(255, 0, 0)");
+
+                            string json = JsonConvert.SerializeObject(product);
+
+                            string messageSent = json;
+                            writer.Write(messageSent);
+
                             client.Client.Shutdown(SocketShutdown.Both);
                             client.Close();
+                            
+                            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: Client disconnected")));
                         }
                         
                     }
@@ -141,7 +151,7 @@ namespace TCPServer
                 string uColor = "rgb(" + nudUserColorRed.Value + "," + nudUserColorGreen.Value + "," + nudUserColorBlue.Value + ")";
                 string msgColor = "rgb(" + nudMessageColorRed.Value + "," + nudMessageColorGreen.Value + "," + nudMessageColorBlue.Value + ")";
 
-                MessageObject product = new MessageObject(tbUsername.Text, tbMessage.Text, uColor, msgColor);
+                MessageObject product = new MessageObject("message", tbUsername.Text, tbMessage.Text, uColor, msgColor);
 
                 string json = JsonConvert.SerializeObject(product);
 
@@ -166,6 +176,7 @@ namespace TCPServer
                 //bwConnection.RunWorkerAsync();
                 //MessageBox.Show(ex.ToString());
             }
+            updateClientList();
         }
 
         private void rbSettingsStyle0_CheckedChanged(object sender, EventArgs e)
@@ -208,15 +219,67 @@ namespace TCPServer
             "<br><div  style=\"display: inline; color: " + product.uColor + "\">" +
             product.uName + ": </div><div style=\"display: inline; color: " + product.msgColor +
             "\">" + message + "</div><br><hr></div>"));
+
+            System.Threading.Thread.Sleep(10);
+            Invoke((MethodInvoker)(() => wbMessage.Document.Window.ScrollTo(0, wbMessage.Document.Body.ScrollRectangle.Height)));
         }
 
-        #region Połączenie Nowe
+        private void updateClientList()
+        {
+            cbUserlist.Items.Clear();
+            cbUserlist.SelectedIndex = -1;
+            foreach (KeyValuePair<int, TcpClient> client in list_clients)
+            {
+                IPEndPoint clientIP = (IPEndPoint)client.Value.Client.RemoteEndPoint;
+                cbUserlist.Items.Add("" + clientIP.ToString());
+            }
+        }
+        
+        private void cbUserlist_Click(object sender, EventArgs e)
+        {
+            updateClientList();
+        }
+
+        private void bKick_Click(object sender, EventArgs e)
+        {
+            if (cbUserlist.SelectedIndex != -1)
+            {
+                TcpClient client;
+                lock (_lock) client = list_clients[cbUserlist.SelectedIndex];
+                IPEndPoint clientIP = (IPEndPoint)client.Client.RemoteEndPoint;
+
+                MessageBox.Show("" + client.Client.RemoteEndPoint.ToString(), "" + cbUserlist.SelectedIndex);
+
+                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: Kicking ...")));
+                NetworkStream stream = client.GetStream();
+                BinaryWriter writer = new BinaryWriter(stream);
+                MessageObject product = new MessageObject("message", "[" + serverIP.ToString() + ":" + port.ToString() + "]", "You have been kicked", "rgb(255, 0, 0)", "rgb(255, 0, 0)");
+
+                string json = JsonConvert.SerializeObject(product);
+
+                string messageSent = json;
+                writer.Write(messageSent);
+
+                lock (_lock) list_clients.Remove(cbUserlist.SelectedIndex);
+                client.Client.Shutdown(SocketShutdown.Both);
+                client.Close();
+
+                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: Client disconnected")));
+            }
+            else
+            {
+                MessageBox.Show("No user selected");
+            }
+        }
+
         public void handle_clients(object o)
         {
             int id = (int)o;
             TcpClient client;
 
             lock (_lock) client = list_clients[id];
+
+            IPEndPoint clientIP = (IPEndPoint)client.Client.RemoteEndPoint;
 
             BinaryReader reader = new BinaryReader(client.GetStream());
             string messageRecieved;
@@ -225,7 +288,7 @@ namespace TCPServer
             {
                 while ((messageRecieved = reader.ReadString()) != "END")
                 {
-                    this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageRecieved)));
+                    this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: uName = " + JsonConvert.DeserializeObject<MessageObject>(messageRecieved).uName)));
                     try
                     {
                         displayMessage(messageRecieved);
@@ -233,7 +296,7 @@ namespace TCPServer
                     }
                     catch
                     {
-                        this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Message dropped")));
+                        //this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Message dropped")));
                     }
                 }
             }
@@ -241,13 +304,15 @@ namespace TCPServer
             {
                 //this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Client closed connection unexpectedly R")));
             }
-            
+
 
             lock (_lock) list_clients.Remove(id);
             try // Mogą być już usunięte
             {
                 client.Client.Shutdown(SocketShutdown.Both);
                 client.Close();
+                
+                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: Client disconnected")));
             }
             catch
             {
@@ -257,15 +322,11 @@ namespace TCPServer
 
         public void broadcast(string data)
         {
-            //byte[] buffer = Encoding.ASCII.GetBytes(data + Environment.NewLine);
-            Invoke((MethodInvoker)(() => lbLogger.Items.Add("BROADCAST")));
             lock (_lock)
             {
                 foreach (TcpClient c in list_clients.Values)
                 {
                     NetworkStream stream = c.GetStream();
-
-                    Invoke((MethodInvoker)(() => lbLogger.Items.Add("BROADCAST Internal: " + data)));
 
                     BinaryWriter writer = new BinaryWriter(stream);
 
@@ -273,17 +334,18 @@ namespace TCPServer
                 }
             }
         }
-        #endregion
     }
-        internal class MessageObject
+    internal class MessageObject
     {
+        public readonly string msgType;
         public readonly string uName;
         public readonly string uMsg;
         public readonly string msgColor;
         public readonly string uColor;
 
-        public MessageObject(string uname, string umsg, string msgcolor, string ucolor)
+        public MessageObject(string msgtype, string uname, string umsg, string msgcolor, string ucolor)
         {
+            msgType = msgtype;
             uName = uname;
             uMsg = umsg;
             msgColor = msgcolor;

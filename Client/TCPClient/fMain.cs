@@ -30,11 +30,8 @@ namespace TCPClient
         private void bConnect_Click(object sender, EventArgs e)
         {
             lbLogger.Items.Add("Attempting connection ...");
-            //if (bwConnection.IsBusy)
-            //{
-                
-                bwConnection.RunWorkerAsync();
-           // }
+            bwConnection.RunWorkerAsync();
+            wbMessage.DocumentText = "<body>";
         }
 
         private void bDisconnect_Click(object sender, EventArgs e)
@@ -86,7 +83,7 @@ namespace TCPClient
                 this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = true));
                 this.Invoke((MethodInvoker)(() => bSend.Enabled = true));
             }
-            catch (Exception ex)
+            catch
             {
                 activeCall = false;
             }
@@ -116,7 +113,7 @@ namespace TCPClient
                 this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = false));
                 this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
             }
-            catch (Exception ex)
+            catch
             {
                 this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Connection closed unexpectedly")));
                 this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("")));
@@ -131,22 +128,12 @@ namespace TCPClient
             string uColor = "rgb(" + nudUserColorRed.Value + "," + nudUserColorGreen.Value + "," + nudUserColorBlue.Value + ")";
             string msgColor = "rgb(" + nudMessageColorRed.Value + "," + nudMessageColorGreen.Value + "," + nudMessageColorBlue.Value + ")";
 
-            MessageObject product = new MessageObject(tbUsername.Text, tbMessage.Text, uColor, msgColor);
+            MessageObject product = new MessageObject("message", tbUsername.Text, tbMessage.Text, uColor, msgColor);
 
             string json = JsonConvert.SerializeObject(product);
 
             string messageSent = json;
             writing.Write(messageSent);
-        }
-
-        private void btBold_Click(object sender, EventArgs e)
-        {
-            tbMessage.Text += "<b></b>";
-        }
-
-        private void btItalic_Click(object sender, EventArgs e)
-        {
-            tbMessage.Text += "<i></i>";
         }
 
         private void rbDark_CheckedChanged(object sender, EventArgs e)
@@ -189,23 +176,23 @@ namespace TCPClient
             "<br><div  style=\"display: inline; color: " + product.uColor + "\">" +
             product.uName + ": </div><div style=\"display: inline; color: " + product.msgColor +
             "\">"   + message + "</div><br><hr></div>"));
-        }
 
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
-        {
-
+            System.Threading.Thread.Sleep(10);
+            Invoke((MethodInvoker)(() => wbMessage.Document.Window.ScrollTo(0, wbMessage.Document.Body.ScrollRectangle.Height)));
         }
     }
 
     internal class MessageObject
     {
+        public readonly string msgType;
         public readonly string uName;
         public readonly string uMsg;
         public readonly string msgColor;
         public readonly string uColor;
-        
-        public MessageObject(string uname, string umsg, string msgcolor, string ucolor)
+
+        public MessageObject(string msgtype, string uname, string umsg, string msgcolor, string ucolor)
         {
+            msgType = msgtype;
             uName = uname;
             uMsg = umsg;
             msgColor = msgcolor;
