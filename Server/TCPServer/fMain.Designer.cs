@@ -474,6 +474,7 @@
             // 
             this.cbUserlist.FormattingEnabled = true;
             this.cbUserlist.Location = new System.Drawing.Point(7, 20);
+            this.cbUserlist.MaxDropDownItems = 32;
             this.cbUserlist.Name = "cbUserlist";
             this.cbUserlist.Size = new System.Drawing.Size(109, 21);
             this.cbUserlist.TabIndex = 0;

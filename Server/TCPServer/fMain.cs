@@ -245,10 +245,12 @@ namespace TCPServer
             if (cbUserlist.SelectedIndex != -1)
             {
                 TcpClient client;
-                lock (_lock) client = list_clients[cbUserlist.SelectedIndex];
+                List<int> keyList = list_clients.Keys.ToList();
+
+                lock (_lock) client = list_clients[keyList[cbUserlist.SelectedIndex]];
                 IPEndPoint clientIP = (IPEndPoint)client.Client.RemoteEndPoint;
 
-                MessageBox.Show("" + client.Client.RemoteEndPoint.ToString(), "" + cbUserlist.SelectedIndex);
+                MessageBox.Show("Kicking: " + client.Client.RemoteEndPoint.ToString(), "" + cbUserlist.SelectedIndex);
 
                 this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: Kicking ...")));
                 NetworkStream stream = client.GetStream();
@@ -259,10 +261,11 @@ namespace TCPServer
 
                 string messageSent = json;
                 writer.Write(messageSent);
-
-                lock (_lock) list_clients.Remove(cbUserlist.SelectedIndex);
+                
+                lock (_lock) list_clients.Remove(keyList[cbUserlist.SelectedIndex]);
                 client.Client.Shutdown(SocketShutdown.Both);
                 client.Close();
+                updateClientList();
 
                 this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: Client disconnected")));
             }
