@@ -18,25 +18,31 @@ namespace TCPServer
 {
     public partial class fMain : Form
     {
-        static readonly object _lock = new object();
-        static readonly Dictionary<int, TcpClient> list_clients = new Dictionary<int, TcpClient>();
-        IPAddress serverIP = null;
-        ushort port;
-
-        private TcpListener server = null;
-
         public fMain()
         {
             InitializeComponent();
         }
 
+        #region Zmienne
+        static readonly object _lock = new object();
+        static readonly Dictionary<int, TcpClient> list_clients = new Dictionary<int, TcpClient>();
+
+        IPAddress serverIP = null;
+        ushort port;
+
+        private TcpListener server = null;
+        #endregion
+
+        #region Przyciski
         private void bStart_Click(object sender, EventArgs e)
         {
             lbLogger.Items.Add("Starting server ...");
             bwConnection.RunWorkerAsync();
+
             bStart.Enabled = false;
             bStop.Enabled = true;
             bSend.Enabled = true;
+
             wbMessage.DocumentText = "<body>";
         }
 
@@ -55,7 +61,44 @@ namespace TCPServer
             bStop.Enabled = false;
             bSend.Enabled = false;
         }
+        
+        private void bSend_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string uColor = "rgb(" + nudUserColorRed.Value + "," + nudUserColorGreen.Value + "," + nudUserColorBlue.Value + ")";
+                string msgColor = "rgb(" + nudMessageColorRed.Value + "," + nudMessageColorGreen.Value + "," + nudMessageColorBlue.Value + ")";
 
+                MessageObject product = new MessageObject("message", tbUsername.Text, tbMessage.Text, uColor, msgColor);
+
+                string json = JsonConvert.SerializeObject(product);
+
+                string messageSent = json;
+                displayMessage(messageSent);
+                broadcast(messageSent);
+            }
+            catch //(Exception ex)
+            {
+                //lbLogger.Items.Add("");
+                //lbLogger.Items.Add("Client closed connection unexpectedly W");
+                //if (client != null)
+                //{
+                //    client.Close();
+                //    client = null;
+                //}
+                //server.Stop();
+                //bwConnection.CancelAsync();
+                //bStart.Enabled = true;
+                //bStop.Enabled = false;
+                //bSend.Enabled = false;
+                //bwConnection.RunWorkerAsync();
+                //MessageBox.Show(ex.ToString());
+            }
+            updateClientList();
+        }
+        #endregion
+
+        #region Połączenie
         private void bwConnection_DoWork(object sender, DoWorkEventArgs e)
         {
             int count = 0;
@@ -100,7 +143,7 @@ namespace TCPServer
                         if (reader.ReadString() == tbPassword.Text)
                         {
                             lock (_lock) list_clients.Add(count, client);
-                            
+
                             this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: Client connected")));
 
                             Thread t = new Thread(handle_clients);
@@ -125,10 +168,10 @@ namespace TCPServer
 
                             client.Client.Shutdown(SocketShutdown.Both);
                             client.Close();
-                            
+
                             this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: Client disconnected")));
                         }
-                        
+
                     }
                 }
                 catch
@@ -143,42 +186,9 @@ namespace TCPServer
                 this.Invoke((MethodInvoker)(() => bStop.Enabled = false));
             }
         }
+        #endregion
 
-        private void bSend_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string uColor = "rgb(" + nudUserColorRed.Value + "," + nudUserColorGreen.Value + "," + nudUserColorBlue.Value + ")";
-                string msgColor = "rgb(" + nudMessageColorRed.Value + "," + nudMessageColorGreen.Value + "," + nudMessageColorBlue.Value + ")";
-
-                MessageObject product = new MessageObject("message", tbUsername.Text, tbMessage.Text, uColor, msgColor);
-
-                string json = JsonConvert.SerializeObject(product);
-
-                string messageSent = json;
-                displayMessage(messageSent);
-                broadcast(messageSent);
-            }
-            catch //(Exception ex)
-            {
-                //lbLogger.Items.Add("");
-                //lbLogger.Items.Add("Client closed connection unexpectedly W");
-                //if (client != null)
-                //{
-                //    client.Close();
-                //    client = null;
-                //}
-                //server.Stop();
-                //bwConnection.CancelAsync();
-                //bStart.Enabled = true;
-                //bStop.Enabled = false;
-                //bSend.Enabled = false;
-                //bwConnection.RunWorkerAsync();
-                //MessageBox.Show(ex.ToString());
-            }
-            updateClientList();
-        }
-
+        #region Style
         private void rbSettingsStyle0_CheckedChanged(object sender, EventArgs e)
         {
             if (rbSettingsStyle0.Checked)
@@ -194,36 +204,9 @@ namespace TCPServer
                 this.BackColor = SystemColors.ControlDark;
             }
         }
-
-        private void displayMessage(string messageBlock)
-        {
-            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageBlock)));
-            MessageObject product = JsonConvert.DeserializeObject<MessageObject>(messageBlock);
-            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("UName = " + product.uName)));
-            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("UMsg = " + product.uMsg)));
-
-            string message = product.uMsg;
-            message = message.Replace("<", "&lt;");
-            message = message.Replace(">", "&gt;");
-
-            message = CommonMarkConverter.Convert(message);
-            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("message = " + message)));
-
-            message = message.Replace("<p>", "");
-            message = message.Replace("</p>", "");
-            message = message.Replace("<img", "<img style=\"width: 300px\"");
-            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("message = " + message)));
-
-            this.Invoke((MethodInvoker)(() => wbMessage.DocumentText +=
-            "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now +
-            "<br><div  style=\"display: inline; color: " + product.uColor + "\">" +
-            product.uName + ": </div><div style=\"display: inline; color: " + product.msgColor +
-            "\">" + message + "</div><br><hr></div>"));
-
-            System.Threading.Thread.Sleep(10);
-            Invoke((MethodInvoker)(() => wbMessage.Document.Window.ScrollTo(0, wbMessage.Document.Body.ScrollRectangle.Height)));
-        }
-
+        #endregion
+        
+        #region Kickowanie
         private void updateClientList()
         {
             cbUserlist.Items.Clear();
@@ -273,6 +256,34 @@ namespace TCPServer
             {
                 MessageBox.Show("No user selected");
             }
+        }
+        #endregion
+        
+        #region Komunikacja
+        private void displayMessage(string messageBlock)
+        {
+            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageBlock)));
+            MessageObject product = JsonConvert.DeserializeObject<MessageObject>(messageBlock);
+            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("UName = " + product.uName)));
+            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("UMsg = " + product.uMsg)));
+
+            string message = product.uMsg;
+            message = message.Replace("<", "&lt;");
+            message = message.Replace(">", "&gt;");
+
+            message = CommonMarkConverter.Convert(message);
+            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("message = " + message)));
+
+            message = message.Replace("<p>", "");
+            message = message.Replace("</p>", "");
+            message = message.Replace("<img", "<img style=\"width: 300px\"");
+            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("message = " + message)));
+
+            this.Invoke((MethodInvoker)(() => wbMessage.DocumentText +=
+            "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now +
+            "<br><div  style=\"display: inline; color: " + product.uColor + "\">" +
+            product.uName + ": </div><div style=\"display: inline; color: " + product.msgColor +
+            "\">" + message + "</div><br><hr></div><script>document.body.scrollTop = document.body.scrollHeight</script>"));
         }
 
         public void handle_clients(object o)
@@ -337,6 +348,7 @@ namespace TCPServer
                 }
             }
         }
+        #endregion
     }
     internal class MessageObject
     {

@@ -20,7 +20,6 @@ namespace TCPClient
         private TcpClient client = null;
         private BinaryWriter writing = null;
         private BinaryReader reading = null;
-        private bool activeCall = false;
 
         public fMain()
         {
@@ -32,6 +31,7 @@ namespace TCPClient
             lbLogger.Items.Add("Attempting connection ...");
             bwConnection.RunWorkerAsync();
             wbMessage.DocumentText = "<body>";
+            bConnect.Enabled = false;
         }
 
         private void bDisconnect_Click(object sender, EventArgs e)
@@ -77,7 +77,6 @@ namespace TCPClient
                 reading = new BinaryReader(ns);
                 writing = new BinaryWriter(ns);
                 writing.Write(tbPass.Text);
-                activeCall = true;
                 bwMessages.RunWorkerAsync();
                 this.Invoke((MethodInvoker)(() => bConnect.Enabled = false));
                 this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = true));
@@ -85,11 +84,7 @@ namespace TCPClient
             }
             catch
             {
-                activeCall = false;
-            }
-
-            if(!activeCall)
-            {
+                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Failed to connect!")));
                 this.Invoke((MethodInvoker)(() => bConnect.Enabled = true));
                 this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = false));
                 this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
@@ -175,10 +170,7 @@ namespace TCPClient
             "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now +
             "<br><div  style=\"display: inline; color: " + product.uColor + "\">" +
             product.uName + ": </div><div style=\"display: inline; color: " + product.msgColor +
-            "\">"   + message + "</div><br><hr></div>"));
-
-            System.Threading.Thread.Sleep(10);
-            Invoke((MethodInvoker)(() => wbMessage.Document.Window.ScrollTo(0, wbMessage.Document.Body.ScrollRectangle.Height)));
+            "\">"   + message + "</div><br><hr></div><script>document.body.scrollTop = document.body.scrollHeight</script>"));
         }
     }
 

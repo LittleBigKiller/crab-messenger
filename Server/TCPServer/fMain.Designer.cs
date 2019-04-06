@@ -62,10 +62,12 @@
             this.nudMessageColorBlue = new System.Windows.Forms.NumericUpDown();
             this.nudMessageColorGreen = new System.Windows.Forms.NumericUpDown();
             this.nudMessageColorRed = new System.Windows.Forms.NumericUpDown();
-            this.gbAdmin = new System.Windows.Forms.GroupBox();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.gbKick = new System.Windows.Forms.GroupBox();
             this.bKick = new System.Windows.Forms.Button();
             this.cbUserlist = new System.Windows.Forms.ComboBox();
+            this.pbPlaceholder = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudPort)).BeginInit();
             this.gbSettings.SuspendLayout();
             this.gbSettingsChat.SuspendLayout();
@@ -79,8 +81,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorBlue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorGreen)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorRed)).BeginInit();
-            this.gbAdmin.SuspendLayout();
             this.gbKick.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbPlaceholder)).BeginInit();
             this.SuspendLayout();
             // 
             // lAddress
@@ -439,36 +441,25 @@
             this.nudMessageColorRed.Size = new System.Drawing.Size(95, 20);
             this.nudMessageColorRed.TabIndex = 0;
             // 
-            // gbAdmin
-            // 
-            this.gbAdmin.Controls.Add(this.gbKick);
-            this.gbAdmin.Location = new System.Drawing.Point(387, 6);
-            this.gbAdmin.Name = "gbAdmin";
-            this.gbAdmin.Size = new System.Drawing.Size(182, 225);
-            this.gbAdmin.TabIndex = 18;
-            this.gbAdmin.TabStop = false;
-            this.gbAdmin.Text = "Administration";
-            // 
             // gbKick
             // 
             this.gbKick.Controls.Add(this.bKick);
             this.gbKick.Controls.Add(this.cbUserlist);
-            this.gbKick.Location = new System.Drawing.Point(6, 19);
+            this.gbKick.Location = new System.Drawing.Point(387, 6);
             this.gbKick.Name = "gbKick";
-            this.gbKick.Size = new System.Drawing.Size(170, 49);
-            this.gbKick.TabIndex = 0;
+            this.gbKick.Size = new System.Drawing.Size(182, 46);
+            this.gbKick.TabIndex = 3;
             this.gbKick.TabStop = false;
             this.gbKick.Text = "User Management";
             // 
             // bKick
             // 
-            this.bKick.Location = new System.Drawing.Point(122, 20);
+            this.bKick.Location = new System.Drawing.Point(128, 20);
             this.bKick.Name = "bKick";
             this.bKick.Size = new System.Drawing.Size(42, 21);
             this.bKick.TabIndex = 1;
             this.bKick.Text = "Kick";
             this.bKick.UseVisualStyleBackColor = true;
-            this.bKick.Click += new System.EventHandler(this.bKick_Click);
             // 
             // cbUserlist
             // 
@@ -476,16 +467,27 @@
             this.cbUserlist.Location = new System.Drawing.Point(7, 20);
             this.cbUserlist.MaxDropDownItems = 32;
             this.cbUserlist.Name = "cbUserlist";
-            this.cbUserlist.Size = new System.Drawing.Size(109, 21);
+            this.cbUserlist.Size = new System.Drawing.Size(115, 21);
             this.cbUserlist.TabIndex = 0;
-            this.cbUserlist.MouseEnter += new System.EventHandler(this.cbUserlist_Click);
+            // 
+            // pbPlaceholder
+            // 
+            this.pbPlaceholder.ImageLocation = "https://cdn.discordapp.com/attachments/414841066727145472/563472829799202827/4966" +
+    "0051_1332659790218586_7135521965355302912_n.jpg";
+            this.pbPlaceholder.Location = new System.Drawing.Point(387, 58);
+            this.pbPlaceholder.Name = "pbPlaceholder";
+            this.pbPlaceholder.Size = new System.Drawing.Size(182, 173);
+            this.pbPlaceholder.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbPlaceholder.TabIndex = 18;
+            this.pbPlaceholder.TabStop = false;
             // 
             // fMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(579, 564);
-            this.Controls.Add(this.gbAdmin);
+            this.Controls.Add(this.pbPlaceholder);
+            this.Controls.Add(this.gbKick);
             this.Controls.Add(this.gbSettings);
             this.Controls.Add(this.gbStylization);
             this.Controls.Add(this.tbPassword);
@@ -520,8 +522,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorBlue)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorGreen)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorRed)).EndInit();
-            this.gbAdmin.ResumeLayout(false);
             this.gbKick.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pbPlaceholder)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -562,11 +564,13 @@
         private System.Windows.Forms.NumericUpDown nudMessageColorBlue;
         private System.Windows.Forms.NumericUpDown nudMessageColorGreen;
         private System.Windows.Forms.NumericUpDown nudMessageColorRed;
-        private System.Windows.Forms.GroupBox gbAdmin;
+        private System.Windows.Forms.WebBrowser wbMessage;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.ComponentModel.BackgroundWorker backgroundWorker2;
         private System.Windows.Forms.GroupBox gbKick;
         private System.Windows.Forms.Button bKick;
         private System.Windows.Forms.ComboBox cbUserlist;
-        private System.Windows.Forms.WebBrowser wbMessage;
+        private System.Windows.Forms.PictureBox pbPlaceholder;
     }
 }
 

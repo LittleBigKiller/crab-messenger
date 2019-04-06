@@ -63,6 +63,7 @@
             this.nudMessageColorBlue = new System.Windows.Forms.NumericUpDown();
             this.nudMessageColorGreen = new System.Windows.Forms.NumericUpDown();
             this.nudMessageColorRed = new System.Windows.Forms.NumericUpDown();
+            this.pbPlaceholder = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudPort)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.gbSettingsChat.SuspendLayout();
@@ -76,12 +77,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorBlue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorGreen)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorRed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbPlaceholder)).BeginInit();
             this.SuspendLayout();
             // 
             // lAddress
             // 
             this.lAddress.AutoSize = true;
-            this.lAddress.Location = new System.Drawing.Point(9, 8);
+            this.lAddress.Location = new System.Drawing.Point(12, 7);
             this.lAddress.Name = "lAddress";
             this.lAddress.Size = new System.Drawing.Size(45, 13);
             this.lAddress.TabIndex = 0;
@@ -91,14 +93,14 @@
             // 
             this.tbAddress.Location = new System.Drawing.Point(60, 5);
             this.tbAddress.Name = "tbAddress";
-            this.tbAddress.Size = new System.Drawing.Size(100, 20);
+            this.tbAddress.Size = new System.Drawing.Size(108, 20);
             this.tbAddress.TabIndex = 1;
             this.tbAddress.Text = "127.0.0.1";
             // 
             // lPort
             // 
             this.lPort.AutoSize = true;
-            this.lPort.Location = new System.Drawing.Point(233, 7);
+            this.lPort.Location = new System.Drawing.Point(267, 7);
             this.lPort.Name = "lPort";
             this.lPort.Size = new System.Drawing.Size(26, 13);
             this.lPort.TabIndex = 2;
@@ -106,7 +108,7 @@
             // 
             // nudPort
             // 
-            this.nudPort.Location = new System.Drawing.Point(265, 4);
+            this.nudPort.Location = new System.Drawing.Point(299, 5);
             this.nudPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -180,17 +182,17 @@
             // 
             // tbPass
             // 
-            this.tbPass.Location = new System.Drawing.Point(496, 4);
+            this.tbPass.Location = new System.Drawing.Point(299, 31);
             this.tbPass.Name = "tbPass";
             this.tbPass.PasswordChar = '*';
-            this.tbPass.Size = new System.Drawing.Size(119, 20);
+            this.tbPass.Size = new System.Drawing.Size(120, 20);
             this.tbPass.TabIndex = 14;
             this.tbPass.Text = "zaq1@WSX";
             // 
             // lPass
             // 
             this.lPass.AutoSize = true;
-            this.lPass.Location = new System.Drawing.Point(439, 7);
+            this.lPass.Location = new System.Drawing.Point(240, 34);
             this.lPass.Name = "lPass";
             this.lPass.Size = new System.Drawing.Size(53, 13);
             this.lPass.TabIndex = 15;
@@ -437,12 +439,24 @@
             this.nudMessageColorRed.Size = new System.Drawing.Size(95, 20);
             this.nudMessageColorRed.TabIndex = 0;
             // 
+            // pbPlaceholder
+            // 
+            this.pbPlaceholder.ImageLocation = "https://cdn.discordapp.com/attachments/414841066727145472/563471532790382592/5641" +
+    "4077_405962553558971_3543614315762286592_n.jpg";
+            this.pbPlaceholder.Location = new System.Drawing.Point(426, 5);
+            this.pbPlaceholder.Name = "pbPlaceholder";
+            this.pbPlaceholder.Size = new System.Drawing.Size(181, 212);
+            this.pbPlaceholder.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbPlaceholder.TabIndex = 20;
+            this.pbPlaceholder.TabStop = false;
+            // 
             // fMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(627, 542);
+            this.ClientSize = new System.Drawing.Size(617, 542);
+            this.Controls.Add(this.pbPlaceholder);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.gbStylization);
             this.Controls.Add(this.lPass);
@@ -477,6 +491,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorBlue)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorGreen)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorRed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbPlaceholder)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -519,6 +534,7 @@
         private System.Windows.Forms.NumericUpDown nudMessageColorBlue;
         private System.Windows.Forms.NumericUpDown nudMessageColorGreen;
         private System.Windows.Forms.NumericUpDown nudMessageColorRed;
+        private System.Windows.Forms.PictureBox pbPlaceholder;
     }
 }
 
