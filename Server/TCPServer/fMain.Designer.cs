@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(fMain));
             this.lAddress = new System.Windows.Forms.Label();
             this.lPort = new System.Windows.Forms.Label();
             this.tbAddress = new System.Windows.Forms.TextBox();
@@ -503,6 +504,7 @@
             this.Controls.Add(this.lPort);
             this.Controls.Add(this.lAddress);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "fMain";
             this.Text = "Crab Server";
             ((System.ComponentModel.ISupportInitialize)(this.nudPort)).EndInit();

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(fMain));
             this.lAddress = new System.Windows.Forms.Label();
             this.tbAddress = new System.Windows.Forms.TextBox();
             this.lPort = new System.Windows.Forms.Label();
@@ -471,6 +472,7 @@
             this.Controls.Add(this.lPort);
             this.Controls.Add(this.tbAddress);
             this.Controls.Add(this.lAddress);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(447, 345);
             this.Name = "fMain";
             this.Text = "Crab Client";
