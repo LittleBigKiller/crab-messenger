@@ -51,6 +51,13 @@ namespace TCPServer
             lbLogger.Items.Add("Server stopped ...");
             foreach (KeyValuePair<int, TcpClient> entry in list_clients)
             {
+                NetworkStream stream = entry.Value.GetStream();
+                BinaryWriter writer = new BinaryWriter(stream);
+                MessageObject product = new MessageObject("message", "[" + serverIP.ToString() + ":" + port.ToString() + "]", "Server has been shutdown", "rgb(255, 0, 0)", "rgb(255, 0, 0)");
+                string json = JsonConvert.SerializeObject(product);
+                string messageSent = json;
+                writer.Write(messageSent);
+
                 entry.Value.Client.Shutdown(SocketShutdown.Both);
                 entry.Value.Close();
             }
@@ -77,22 +84,9 @@ namespace TCPServer
                 displayMessage(messageSent);
                 broadcast(messageSent);
             }
-            catch //(Exception ex)
+            catch
             {
-                //lbLogger.Items.Add("");
-                //lbLogger.Items.Add("Client closed connection unexpectedly W");
-                //if (client != null)
-                //{
-                //    client.Close();
-                //    client = null;
-                //}
-                //server.Stop();
-                //bwConnection.CancelAsync();
-                //bStart.Enabled = true;
-                //bStop.Enabled = false;
-                //bSend.Enabled = false;
-                //bwConnection.RunWorkerAsync();
-                //MessageBox.Show(ex.ToString());
+
             }
             updateClientList();
         }
@@ -138,13 +132,18 @@ namespace TCPServer
                         BinaryReader reader = new BinaryReader(client.GetStream());
 
                         IPEndPoint clientIP = (IPEndPoint)client.Client.RemoteEndPoint;
-                        this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: Attempting connection ...")));
+                        this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: New client attempting connection ...")));
 
                         if (reader.ReadString() == tbPassword.Text)
                         {
                             lock (_lock) list_clients.Add(count, client);
 
                             this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: Client connected")));
+
+                            NetworkStream stream = client.GetStream();
+                            BinaryWriter writer = new BinaryWriter(stream);
+                            MessageObject product = new MessageObject("message", "[" + serverIP.ToString() + ":" + port.ToString() + "]", "" + "motd", "rgb(0, 127, 0)", "rgb(0, 127, 0)");
+                            writer.Write(JsonConvert.SerializeObject(product));
 
                             Thread t = new Thread(handle_clients);
                             t.IsBackground = true;
@@ -156,13 +155,9 @@ namespace TCPServer
                             this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: Incorrect password, dropping")));
 
                             NetworkStream stream = client.GetStream();
-
                             BinaryWriter writer = new BinaryWriter(stream);
-
                             MessageObject product = new MessageObject("message", "[" + serverIP.ToString() + ":" + port.ToString() + "]", "Invalid credentials", "rgb(255, 0, 0)", "rgb(255, 0, 0)");
-
                             string json = JsonConvert.SerializeObject(product);
-
                             string messageSent = json;
                             writer.Write(messageSent);
 

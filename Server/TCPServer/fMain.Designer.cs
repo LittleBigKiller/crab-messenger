@@ -63,12 +63,12 @@
             this.nudMessageColorBlue = new System.Windows.Forms.NumericUpDown();
             this.nudMessageColorGreen = new System.Windows.Forms.NumericUpDown();
             this.nudMessageColorRed = new System.Windows.Forms.NumericUpDown();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.gbKick = new System.Windows.Forms.GroupBox();
             this.bKick = new System.Windows.Forms.Button();
             this.cbUserlist = new System.Windows.Forms.ComboBox();
-            this.pbPlaceholder = new System.Windows.Forms.PictureBox();
+            this.gbAdmin = new System.Windows.Forms.GroupBox();
+            this.gbMOTD = new System.Windows.Forms.GroupBox();
+            this.rtbMOTD = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudPort)).BeginInit();
             this.gbSettings.SuspendLayout();
             this.gbSettingsChat.SuspendLayout();
@@ -83,13 +83,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorGreen)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorRed)).BeginInit();
             this.gbKick.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbPlaceholder)).BeginInit();
+            this.gbAdmin.SuspendLayout();
+            this.gbMOTD.SuspendLayout();
             this.SuspendLayout();
             // 
             // lAddress
             // 
             this.lAddress.AutoSize = true;
-            this.lAddress.Location = new System.Drawing.Point(12, 9);
+            this.lAddress.Location = new System.Drawing.Point(8, 8);
             this.lAddress.Name = "lAddress";
             this.lAddress.Size = new System.Drawing.Size(45, 13);
             this.lAddress.TabIndex = 0;
@@ -98,7 +99,7 @@
             // lPort
             // 
             this.lPort.AutoSize = true;
-            this.lPort.Location = new System.Drawing.Point(209, 9);
+            this.lPort.Location = new System.Drawing.Point(241, 8);
             this.lPort.Name = "lPort";
             this.lPort.Size = new System.Drawing.Size(26, 13);
             this.lPort.TabIndex = 1;
@@ -106,9 +107,9 @@
             // 
             // tbAddress
             // 
-            this.tbAddress.Location = new System.Drawing.Point(63, 6);
+            this.tbAddress.Location = new System.Drawing.Point(59, 5);
             this.tbAddress.Name = "tbAddress";
-            this.tbAddress.Size = new System.Drawing.Size(140, 20);
+            this.tbAddress.Size = new System.Drawing.Size(108, 20);
             this.tbAddress.TabIndex = 2;
             this.tbAddress.Text = "127.0.0.1";
             // 
@@ -123,9 +124,9 @@
             // bStop
             // 
             this.bStop.Enabled = false;
-            this.bStop.Location = new System.Drawing.Point(87, 32);
+            this.bStop.Location = new System.Drawing.Point(92, 31);
             this.bStop.Name = "bStop";
-            this.bStop.Size = new System.Drawing.Size(70, 20);
+            this.bStop.Size = new System.Drawing.Size(75, 20);
             this.bStop.TabIndex = 6;
             this.bStop.Text = "Stop";
             this.bStop.UseVisualStyleBackColor = true;
@@ -133,14 +134,14 @@
             // 
             // nudPort
             // 
-            this.nudPort.Location = new System.Drawing.Point(241, 6);
+            this.nudPort.Location = new System.Drawing.Point(273, 5);
             this.nudPort.Maximum = new decimal(new int[] {
             65535,
             0,
             0,
             0});
             this.nudPort.Name = "nudPort";
-            this.nudPort.Size = new System.Drawing.Size(140, 20);
+            this.nudPort.Size = new System.Drawing.Size(108, 20);
             this.nudPort.TabIndex = 7;
             this.nudPort.Value = new decimal(new int[] {
             5555,
@@ -249,9 +250,9 @@
             // 
             // bStart
             // 
-            this.bStart.Location = new System.Drawing.Point(11, 32);
+            this.bStart.Location = new System.Drawing.Point(11, 31);
             this.bStart.Name = "bStart";
-            this.bStart.Size = new System.Drawing.Size(70, 20);
+            this.bStart.Size = new System.Drawing.Size(75, 20);
             this.bStart.TabIndex = 14;
             this.bStart.Text = "Start";
             this.bStart.UseVisualStyleBackColor = true;
@@ -260,7 +261,7 @@
             // lPassword
             // 
             this.lPassword.AutoSize = true;
-            this.lPassword.Location = new System.Drawing.Point(182, 36);
+            this.lPassword.Location = new System.Drawing.Point(214, 34);
             this.lPassword.Name = "lPassword";
             this.lPassword.Size = new System.Drawing.Size(53, 13);
             this.lPassword.TabIndex = 15;
@@ -268,10 +269,10 @@
             // 
             // tbPassword
             // 
-            this.tbPassword.Location = new System.Drawing.Point(241, 32);
+            this.tbPassword.Location = new System.Drawing.Point(273, 31);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.PasswordChar = '*';
-            this.tbPassword.Size = new System.Drawing.Size(140, 20);
+            this.tbPassword.Size = new System.Drawing.Size(108, 20);
             this.tbPassword.TabIndex = 16;
             this.tbPassword.Text = "zaq1@WSX";
             // 
@@ -446,49 +447,68 @@
             // 
             this.gbKick.Controls.Add(this.bKick);
             this.gbKick.Controls.Add(this.cbUserlist);
-            this.gbKick.Location = new System.Drawing.Point(387, 6);
+            this.gbKick.Location = new System.Drawing.Point(6, 19);
             this.gbKick.Name = "gbKick";
-            this.gbKick.Size = new System.Drawing.Size(182, 46);
+            this.gbKick.Size = new System.Drawing.Size(170, 46);
             this.gbKick.TabIndex = 3;
             this.gbKick.TabStop = false;
             this.gbKick.Text = "User Management";
             // 
             // bKick
             // 
-            this.bKick.Location = new System.Drawing.Point(128, 20);
+            this.bKick.Location = new System.Drawing.Point(122, 19);
             this.bKick.Name = "bKick";
             this.bKick.Size = new System.Drawing.Size(42, 21);
             this.bKick.TabIndex = 1;
             this.bKick.Text = "Kick";
             this.bKick.UseVisualStyleBackColor = true;
+            this.bKick.Click += new System.EventHandler(this.bKick_Click);
             // 
             // cbUserlist
             // 
             this.cbUserlist.FormattingEnabled = true;
-            this.cbUserlist.Location = new System.Drawing.Point(7, 20);
+            this.cbUserlist.Location = new System.Drawing.Point(6, 20);
             this.cbUserlist.MaxDropDownItems = 32;
             this.cbUserlist.Name = "cbUserlist";
-            this.cbUserlist.Size = new System.Drawing.Size(115, 21);
+            this.cbUserlist.Size = new System.Drawing.Size(110, 21);
             this.cbUserlist.TabIndex = 0;
+            this.cbUserlist.Click += new System.EventHandler(this.cbUserlist_Click);
             // 
-            // pbPlaceholder
+            // gbAdmin
             // 
-            this.pbPlaceholder.ImageLocation = "https://cdn.discordapp.com/attachments/414841066727145472/563472829799202827/4966" +
-    "0051_1332659790218586_7135521965355302912_n.jpg";
-            this.pbPlaceholder.Location = new System.Drawing.Point(387, 58);
-            this.pbPlaceholder.Name = "pbPlaceholder";
-            this.pbPlaceholder.Size = new System.Drawing.Size(182, 173);
-            this.pbPlaceholder.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbPlaceholder.TabIndex = 18;
-            this.pbPlaceholder.TabStop = false;
+            this.gbAdmin.Controls.Add(this.gbMOTD);
+            this.gbAdmin.Controls.Add(this.gbKick);
+            this.gbAdmin.Location = new System.Drawing.Point(387, 6);
+            this.gbAdmin.Name = "gbAdmin";
+            this.gbAdmin.Size = new System.Drawing.Size(182, 225);
+            this.gbAdmin.TabIndex = 18;
+            this.gbAdmin.TabStop = false;
+            this.gbAdmin.Text = "Server Settings";
+            // 
+            // gbMOTD
+            // 
+            this.gbMOTD.Controls.Add(this.rtbMOTD);
+            this.gbMOTD.Location = new System.Drawing.Point(8, 72);
+            this.gbMOTD.Name = "gbMOTD";
+            this.gbMOTD.Size = new System.Drawing.Size(168, 147);
+            this.gbMOTD.TabIndex = 4;
+            this.gbMOTD.TabStop = false;
+            this.gbMOTD.Text = "Message of the Day";
+            // 
+            // rtbMOTD
+            // 
+            this.rtbMOTD.Location = new System.Drawing.Point(7, 20);
+            this.rtbMOTD.Name = "rtbMOTD";
+            this.rtbMOTD.Size = new System.Drawing.Size(155, 121);
+            this.rtbMOTD.TabIndex = 0;
+            this.rtbMOTD.Text = "Welcome!\nYou managed to connect to my test server.\nHave a good day";
             // 
             // fMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(579, 564);
-            this.Controls.Add(this.pbPlaceholder);
-            this.Controls.Add(this.gbKick);
+            this.ClientSize = new System.Drawing.Size(584, 561);
+            this.Controls.Add(this.gbAdmin);
             this.Controls.Add(this.gbSettings);
             this.Controls.Add(this.gbStylization);
             this.Controls.Add(this.tbPassword);
@@ -505,6 +525,8 @@
             this.Controls.Add(this.lAddress);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximumSize = new System.Drawing.Size(600, 600);
+            this.MinimumSize = new System.Drawing.Size(600, 600);
             this.Name = "fMain";
             this.Text = "Crab Server";
             ((System.ComponentModel.ISupportInitialize)(this.nudPort)).EndInit();
@@ -525,7 +547,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorGreen)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMessageColorRed)).EndInit();
             this.gbKick.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pbPlaceholder)).EndInit();
+            this.gbAdmin.ResumeLayout(false);
+            this.gbMOTD.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -567,12 +590,12 @@
         private System.Windows.Forms.NumericUpDown nudMessageColorGreen;
         private System.Windows.Forms.NumericUpDown nudMessageColorRed;
         private System.Windows.Forms.WebBrowser wbMessage;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private System.ComponentModel.BackgroundWorker backgroundWorker2;
         private System.Windows.Forms.GroupBox gbKick;
         private System.Windows.Forms.Button bKick;
         private System.Windows.Forms.ComboBox cbUserlist;
-        private System.Windows.Forms.PictureBox pbPlaceholder;
+        private System.Windows.Forms.GroupBox gbAdmin;
+        private System.Windows.Forms.GroupBox gbMOTD;
+        private System.Windows.Forms.RichTextBox rtbMOTD;
     }
 }
 

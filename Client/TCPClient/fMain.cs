@@ -36,6 +36,13 @@ namespace TCPClient
 
         private void bDisconnect_Click(object sender, EventArgs e)
         {
+            NetworkStream stream = client.GetStream();
+            BinaryWriter writer = new BinaryWriter(stream);
+            MessageObject product = new MessageObject("message", "[NOTICE]", "Disconnected from server", "rgb(255, 0, 0)", "rgb(255, 0, 0)");
+            string json = JsonConvert.SerializeObject(product);
+            string messageSent = json;
+            displayMessage(messageSent);
+
             lbLogger.Items.Add("Closing connection ...");
             if (client != null)
             {
@@ -110,7 +117,7 @@ namespace TCPClient
             }
             catch
             {
-                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Connection closed unexpectedly")));
+                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Connection closed")));
                 this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("")));
                 this.Invoke((MethodInvoker)(() => bConnect.Enabled = true));
                 this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = false));

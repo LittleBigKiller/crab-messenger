@@ -84,7 +84,7 @@
             // lAddress
             // 
             this.lAddress.AutoSize = true;
-            this.lAddress.Location = new System.Drawing.Point(12, 7);
+            this.lAddress.Location = new System.Drawing.Point(8, 8);
             this.lAddress.Name = "lAddress";
             this.lAddress.Size = new System.Drawing.Size(45, 13);
             this.lAddress.TabIndex = 0;
@@ -92,7 +92,7 @@
             // 
             // tbAddress
             // 
-            this.tbAddress.Location = new System.Drawing.Point(60, 5);
+            this.tbAddress.Location = new System.Drawing.Point(59, 5);
             this.tbAddress.Name = "tbAddress";
             this.tbAddress.Size = new System.Drawing.Size(108, 20);
             this.tbAddress.TabIndex = 1;
@@ -101,7 +101,7 @@
             // lPort
             // 
             this.lPort.AutoSize = true;
-            this.lPort.Location = new System.Drawing.Point(267, 7);
+            this.lPort.Location = new System.Drawing.Point(229, 8);
             this.lPort.Name = "lPort";
             this.lPort.Size = new System.Drawing.Size(26, 13);
             this.lPort.TabIndex = 2;
@@ -109,7 +109,7 @@
             // 
             // nudPort
             // 
-            this.nudPort.Location = new System.Drawing.Point(299, 5);
+            this.nudPort.Location = new System.Drawing.Point(261, 6);
             this.nudPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -127,14 +127,14 @@
             // lbLogger
             // 
             this.lbLogger.FormattingEnabled = true;
-            this.lbLogger.Location = new System.Drawing.Point(12, 57);
+            this.lbLogger.Location = new System.Drawing.Point(11, 58);
             this.lbLogger.Name = "lbLogger";
-            this.lbLogger.Size = new System.Drawing.Size(407, 160);
+            this.lbLogger.Size = new System.Drawing.Size(370, 173);
             this.lbLogger.TabIndex = 4;
             // 
             // bConnect
             // 
-            this.bConnect.Location = new System.Drawing.Point(12, 31);
+            this.bConnect.Location = new System.Drawing.Point(11, 31);
             this.bConnect.Name = "bConnect";
             this.bConnect.Size = new System.Drawing.Size(75, 20);
             this.bConnect.TabIndex = 5;
@@ -145,7 +145,7 @@
             // bDisconnect
             // 
             this.bDisconnect.Enabled = false;
-            this.bDisconnect.Location = new System.Drawing.Point(93, 31);
+            this.bDisconnect.Location = new System.Drawing.Point(92, 31);
             this.bDisconnect.Name = "bDisconnect";
             this.bDisconnect.Size = new System.Drawing.Size(75, 20);
             this.bDisconnect.TabIndex = 6;
@@ -155,9 +155,9 @@
             // 
             // tbMessage
             // 
-            this.tbMessage.Location = new System.Drawing.Point(12, 510);
+            this.tbMessage.Location = new System.Drawing.Point(11, 531);
             this.tbMessage.Name = "tbMessage";
-            this.tbMessage.Size = new System.Drawing.Size(326, 20);
+            this.tbMessage.Size = new System.Drawing.Size(294, 20);
             this.tbMessage.TabIndex = 7;
             // 
             // bwConnection
@@ -173,9 +173,9 @@
             // bSend
             // 
             this.bSend.Enabled = false;
-            this.bSend.Location = new System.Drawing.Point(344, 509);
+            this.bSend.Location = new System.Drawing.Point(311, 531);
             this.bSend.Name = "bSend";
-            this.bSend.Size = new System.Drawing.Size(75, 20);
+            this.bSend.Size = new System.Drawing.Size(70, 20);
             this.bSend.TabIndex = 8;
             this.bSend.Text = "Send";
             this.bSend.UseVisualStyleBackColor = true;
@@ -183,7 +183,7 @@
             // 
             // tbPass
             // 
-            this.tbPass.Location = new System.Drawing.Point(299, 31);
+            this.tbPass.Location = new System.Drawing.Point(261, 32);
             this.tbPass.Name = "tbPass";
             this.tbPass.PasswordChar = '*';
             this.tbPass.Size = new System.Drawing.Size(120, 20);
@@ -193,7 +193,7 @@
             // lPass
             // 
             this.lPass.AutoSize = true;
-            this.lPass.Location = new System.Drawing.Point(240, 34);
+            this.lPass.Location = new System.Drawing.Point(202, 35);
             this.lPass.Name = "lPass";
             this.lPass.Size = new System.Drawing.Size(53, 13);
             this.lPass.TabIndex = 15;
@@ -201,17 +201,17 @@
             // 
             // wbMessage
             // 
-            this.wbMessage.Location = new System.Drawing.Point(12, 223);
+            this.wbMessage.Location = new System.Drawing.Point(11, 242);
             this.wbMessage.MinimumSize = new System.Drawing.Size(20, 20);
             this.wbMessage.Name = "wbMessage";
-            this.wbMessage.Size = new System.Drawing.Size(407, 280);
+            this.wbMessage.Size = new System.Drawing.Size(370, 282);
             this.wbMessage.TabIndex = 9;
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.gbSettingsChat);
             this.groupBox1.Controls.Add(this.gbSettingsStyle);
-            this.groupBox1.Location = new System.Drawing.Point(425, 223);
+            this.groupBox1.Location = new System.Drawing.Point(387, 242);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(182, 77);
             this.groupBox1.TabIndex = 18;
@@ -277,7 +277,7 @@
             // 
             this.gbStylization.Controls.Add(this.gbUserColor);
             this.gbStylization.Controls.Add(this.gbMessageColor);
-            this.gbStylization.Location = new System.Drawing.Point(425, 306);
+            this.gbStylization.Location = new System.Drawing.Point(387, 325);
             this.gbStylization.Name = "gbStylization";
             this.gbStylization.Size = new System.Drawing.Size(182, 226);
             this.gbStylization.TabIndex = 19;
@@ -444,9 +444,9 @@
             // 
             this.pbPlaceholder.ImageLocation = "https://cdn.discordapp.com/attachments/414841066727145472/563471532790382592/5641" +
     "4077_405962553558971_3543614315762286592_n.jpg";
-            this.pbPlaceholder.Location = new System.Drawing.Point(426, 5);
+            this.pbPlaceholder.Location = new System.Drawing.Point(387, 6);
             this.pbPlaceholder.Name = "pbPlaceholder";
-            this.pbPlaceholder.Size = new System.Drawing.Size(181, 212);
+            this.pbPlaceholder.Size = new System.Drawing.Size(182, 225);
             this.pbPlaceholder.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbPlaceholder.TabIndex = 20;
             this.pbPlaceholder.TabStop = false;
@@ -456,7 +456,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(617, 542);
+            this.ClientSize = new System.Drawing.Size(584, 561);
             this.Controls.Add(this.pbPlaceholder);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.gbStylization);
@@ -473,7 +473,8 @@
             this.Controls.Add(this.tbAddress);
             this.Controls.Add(this.lAddress);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(447, 345);
+            this.MaximumSize = new System.Drawing.Size(600, 600);
+            this.MinimumSize = new System.Drawing.Size(600, 600);
             this.Name = "fMain";
             this.Text = "Crab Client";
             ((System.ComponentModel.ISupportInitialize)(this.nudPort)).EndInit();
