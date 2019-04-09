@@ -45,7 +45,7 @@ namespace TCPServer
             bStop.Enabled = true;
             bSend.Enabled = true;
 
-            wbMessage.DocumentText = "<body>";
+            wbMessage.Navigate("about:blank");
         }
 
         private void bStop_Click(object sender, EventArgs e)
@@ -146,7 +146,7 @@ namespace TCPServer
 
                             NetworkStream stream = client.GetStream();
                             BinaryWriter writer = new BinaryWriter(stream);
-                            MessageObject product = new MessageObject("message", "[Message of the Day]: ", "" + motd, "rgb(0, 127, 0)", "rgb(0, 127, 0)");
+                            MessageObject product = new MessageObject("message", "[Message of the Day]", "" + motd, "rgb(0, 127, 0)", "rgb(0, 127, 0)");
                             writer.Write(JsonConvert.SerializeObject(product));
 
                             Thread t = new Thread(handle_clients);
@@ -191,23 +191,70 @@ namespace TCPServer
         #endregion
 
         #region Style
-        private void rbSettingsStyle0_CheckedChanged(object sender, EventArgs e)
+        private void rbStyleLight_CheckedChanged(object sender, EventArgs e)
         {
-            if (rbSettingsStyle0.Checked)
+            if (rbStyleLight.Checked)
             {
                 this.BackColor = SystemColors.Control;
+
+                tbAddress.BackColor = SystemColors.Window;
+                tbMessage.BackColor = SystemColors.Window;
+                tbPassword.BackColor = SystemColors.Window;
+                tbUsername.BackColor = SystemColors.Window;
+                rtbMOTD.BackColor = SystemColors.Window;
+
+                cbUserlist.BackColor = SystemColors.Window;
+                lbLogger.BackColor = SystemColors.Window;
+
+                nudMessageColorBlue.BackColor = SystemColors.Window;
+                nudMessageColorGreen.BackColor = SystemColors.Window;
+                nudMessageColorRed.BackColor = SystemColors.Window;
+
+                nudPort.BackColor = SystemColors.Window;
+
+                nudUserColorBlue.BackColor = SystemColors.Window;
+                nudUserColorGreen.BackColor = SystemColors.Window;
+                nudUserColorRed.BackColor = SystemColors.Window;
+                
+                wbMessage.Document.Body.Style = "background-color: white";
             }
         }
 
-        private void rbSettingsStyle1_CheckedChanged(object sender, EventArgs e)
+        private void rbStyleDark_CheckedChanged(object sender, EventArgs e)
         {
-            if (rbSettingsStyle1.Checked)
+            if (rbStyleDark.Checked)
             {
-                this.BackColor = SystemColors.ControlDark;
+                this.BackColor = SystemColors.ControlDarkDark;
+
+                tbAddress.BackColor = SystemColors.ControlDark;
+                tbMessage.BackColor = SystemColors.ControlDark;
+                tbPassword.BackColor = SystemColors.ControlDark;
+                tbUsername.BackColor = SystemColors.ControlDark;
+                rtbMOTD.BackColor = SystemColors.ControlDark;
+
+                cbUserlist.BackColor = SystemColors.ControlDark;
+                lbLogger.BackColor = SystemColors.ControlDark;
+
+                nudMessageColorBlue.BackColor = SystemColors.ControlDark;
+                nudMessageColorGreen.BackColor = SystemColors.ControlDark;
+                nudMessageColorRed.BackColor = SystemColors.ControlDark;
+
+                nudPort.BackColor = SystemColors.ControlDark;
+
+                nudUserColorBlue.BackColor = SystemColors.ControlDark;
+                nudUserColorGreen.BackColor = SystemColors.ControlDark;
+                nudUserColorRed.BackColor = SystemColors.ControlDark;
+                
+                wbMessage.Document.Body.Style = "background-color: gray";
             }
         }
+
+        private void wbMessage_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            if (rbStyleDark.Checked) wbMessage.Document.Body.Style = "background-color: gray";
+        }
         #endregion
-        
+
         #region Kickowanie
         private void updateClientList()
         {
@@ -255,7 +302,7 @@ namespace TCPServer
             }
         }
         #endregion
-        
+
         #region Komunikacja
         private void displayMessage(string messageBlock)
         {
@@ -271,11 +318,18 @@ namespace TCPServer
             message = message.Replace("</p>", "");
             message = message.Replace("<img", "<img style=\"width: 300px\"");
 
-            this.Invoke((MethodInvoker)(() => wbMessage.DocumentText +=
-            "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now +
+            HtmlDocument doc = null;
+
+            this.Invoke((MethodInvoker)(() => doc = wbMessage.Document));
+
+            HtmlElement msgDiv = doc.CreateElement("DIV");
+            msgDiv.Style = "width: 300px; word-wrap: break-word;";
+            msgDiv.InnerHtml = "" + DateTime.Now +
             "<br><div  style=\"display: inline; color: " + product.uColor + "\">" +
             product.uName + ": </div><div style=\"display: inline; color: " + product.msgColor +
-            "\">" + message + "</div><br><hr></div><script>document.body.scrollTop = document.body.scrollHeight</script>"));
+            "\">" + message + "</div><br><hr><script>document.body.scrollTop = document.body.scrollHeight</script>";
+
+            this.Invoke((MethodInvoker)(() => doc.Body.AppendChild(msgDiv)));
         }
 
         public void handle_clients(object o)
@@ -290,18 +344,25 @@ namespace TCPServer
             BinaryReader reader = new BinaryReader(client.GetStream());
             string messageRecieved;
 
-            while ((messageRecieved = reader.ReadString()) != "END")
+            try
             {
-                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: uName = " + JsonConvert.DeserializeObject<MessageObject>(messageRecieved).uName)));
-                try
+                while ((messageRecieved = reader.ReadString()) != "END")
                 {
-                    displayMessage(messageRecieved);
-                    broadcast(messageRecieved);
-                }
-                catch
-                {
+                    this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: uName = " + JsonConvert.DeserializeObject<MessageObject>(messageRecieved).uName)));
+                    try
+                    {
+                        displayMessage(messageRecieved);
+                        broadcast(messageRecieved);
+                    }
+                    catch
+                    {
 
+                    }
                 }
+            }
+            catch
+            {
+
             }
 
 

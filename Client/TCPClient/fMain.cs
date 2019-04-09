@@ -33,8 +33,10 @@ namespace TCPClient
         {
             lbLogger.Items.Add("Attempting connection ...");
             bwConnection.RunWorkerAsync();
-            wbMessage.DocumentText = "<body>";
+
             bConnect.Enabled = false;
+
+            wbMessage.Navigate("about:blank");
         }
 
         private void bDisconnect_Click(object sender, EventArgs e)
@@ -100,7 +102,7 @@ namespace TCPClient
                 NetworkStream ns = client.GetStream();
                 reading = new BinaryReader(ns);
                 writing = new BinaryWriter(ns);
-                writing.Write(tbPass.Text);
+                writing.Write(tbPassword.Text);
                 bwMessages.RunWorkerAsync();
                 this.Invoke((MethodInvoker)(() => bConnect.Enabled = false));
                 this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = true));
@@ -117,20 +119,63 @@ namespace TCPClient
         #endregion
 
         #region Style
-        private void rbDark_CheckedChanged(object sender, EventArgs e)
+        private void rbStyleLight_CheckedChanged(object sender, EventArgs e)
         {
-            if (rbDark.Checked)
+            if (rbStyleLight.Checked)
             {
-                this.BackColor = SystemColors.ControlDark;
+                this.BackColor = SystemColors.Control;
+
+                tbAddress.BackColor = SystemColors.Window;
+                tbMessage.BackColor = SystemColors.Window;
+                tbPassword.BackColor = SystemColors.Window;
+                tbUsername.BackColor = SystemColors.Window;
+
+                lbLogger.BackColor = SystemColors.Window;
+
+                nudMessageColorBlue.BackColor = SystemColors.Window;
+                nudMessageColorGreen.BackColor = SystemColors.Window;
+                nudMessageColorRed.BackColor = SystemColors.Window;
+
+                nudPort.BackColor = SystemColors.Window;
+
+                nudUserColorBlue.BackColor = SystemColors.Window;
+                nudUserColorGreen.BackColor = SystemColors.Window;
+                nudUserColorRed.BackColor = SystemColors.Window;
+
+                wbMessage.Document.Body.Style = "background-color: white";
             }
         }
 
-        private void rbLight_CheckedChanged(object sender, EventArgs e)
+        private void rbStyleDark_CheckedChanged(object sender, EventArgs e)
         {
-            if (rbLight.Checked)
+            if (rbStyleDark.Checked)
             {
-                this.BackColor = SystemColors.Control;
+                this.BackColor = SystemColors.ControlDarkDark;
+
+                tbAddress.BackColor = SystemColors.ControlDark;
+                tbMessage.BackColor = SystemColors.ControlDark;
+                tbPassword.BackColor = SystemColors.ControlDark;
+                tbUsername.BackColor = SystemColors.ControlDark;
+
+                lbLogger.BackColor = SystemColors.ControlDark;
+
+                nudMessageColorBlue.BackColor = SystemColors.ControlDark;
+                nudMessageColorGreen.BackColor = SystemColors.ControlDark;
+                nudMessageColorRed.BackColor = SystemColors.ControlDark;
+
+                nudPort.BackColor = SystemColors.ControlDark;
+
+                nudUserColorBlue.BackColor = SystemColors.ControlDark;
+                nudUserColorGreen.BackColor = SystemColors.ControlDark;
+                nudUserColorRed.BackColor = SystemColors.ControlDark;
+
+                wbMessage.Document.Body.Style = "background-color: gray";
             }
+        }
+
+        private void wbMessage_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            if (rbStyleDark.Checked) wbMessage.Document.Body.Style = "background-color: gray";
         }
         #endregion
 
@@ -149,32 +194,37 @@ namespace TCPClient
             message = message.Replace("</p>", "");
             message = message.Replace("<img", "<img style=\"width: 300px\"");
 
-            this.Invoke((MethodInvoker)(() => wbMessage.DocumentText +=
-            "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now +
+            HtmlDocument doc = null;
+
+            this.Invoke((MethodInvoker)(() => doc = wbMessage.Document));
+
+            HtmlElement msgDiv = doc.CreateElement("DIV");
+            msgDiv.Style = "width: 300px; word-wrap: break-word;";
+            msgDiv.InnerHtml = "" + DateTime.Now +
             "<br><div  style=\"display: inline; color: " + product.uColor + "\">" +
             product.uName + ": </div><div style=\"display: inline; color: " + product.msgColor +
-            "\">"   + message + "</div><br><hr></div><script>document.body.scrollTop = document.body.scrollHeight</script>"));
+            "\">" + message + "</div><br><hr><script>document.body.scrollTop = document.body.scrollHeight</script>";
+
+            this.Invoke((MethodInvoker)(() => doc.Body.AppendChild(msgDiv)));
         }
 
         private void bwMessages_DoWork(object sender, DoWorkEventArgs e)
         {
-            try
-            {
-                string messageRecieved;
+            string messageRecieved;
+            try { 
                 while ((messageRecieved = reading.ReadString()) != "END")
                 {
                     displayMessage(messageRecieved);
                 }
                 client.Close();
                 bwConnection.CancelAsync();
+
                 this.Invoke((MethodInvoker)(() => bConnect.Enabled = true));
                 this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = false));
                 this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
             }
             catch
             {
-                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Connection closed")));
-                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("")));
                 this.Invoke((MethodInvoker)(() => bConnect.Enabled = true));
                 this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = false));
                 this.Invoke((MethodInvoker)(() => bSend.Enabled = false));

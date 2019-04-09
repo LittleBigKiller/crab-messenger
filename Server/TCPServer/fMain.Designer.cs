@@ -43,8 +43,8 @@
             this.gbSettingsChat = new System.Windows.Forms.GroupBox();
             this.tbUsername = new System.Windows.Forms.TextBox();
             this.gbSettingsStyle = new System.Windows.Forms.GroupBox();
-            this.rbSettingsStyle1 = new System.Windows.Forms.RadioButton();
-            this.rbSettingsStyle0 = new System.Windows.Forms.RadioButton();
+            this.rbStyleDark = new System.Windows.Forms.RadioButton();
+            this.rbStyleLight = new System.Windows.Forms.RadioButton();
             this.bStart = new System.Windows.Forms.Button();
             this.lPassword = new System.Windows.Forms.Label();
             this.tbPassword = new System.Windows.Forms.TextBox();
@@ -116,6 +116,7 @@
             // lbLogger
             // 
             this.lbLogger.FormattingEnabled = true;
+            this.lbLogger.HorizontalScrollbar = true;
             this.lbLogger.Location = new System.Drawing.Point(11, 58);
             this.lbLogger.Name = "lbLogger";
             this.lbLogger.Size = new System.Drawing.Size(370, 173);
@@ -180,7 +181,9 @@
             this.wbMessage.Size = new System.Drawing.Size(370, 282);
             this.wbMessage.TabIndex = 10;
             this.wbMessage.TabStop = false;
+            this.wbMessage.Url = new System.Uri("about:blank", System.UriKind.Absolute);
             this.wbMessage.WebBrowserShortcutsEnabled = false;
+            this.wbMessage.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.wbMessage_DocumentCompleted);
             // 
             // gbSettings
             // 
@@ -214,8 +217,8 @@
             // 
             // gbSettingsStyle
             // 
-            this.gbSettingsStyle.Controls.Add(this.rbSettingsStyle1);
-            this.gbSettingsStyle.Controls.Add(this.rbSettingsStyle0);
+            this.gbSettingsStyle.Controls.Add(this.rbStyleDark);
+            this.gbSettingsStyle.Controls.Add(this.rbStyleLight);
             this.gbSettingsStyle.Location = new System.Drawing.Point(8, 13);
             this.gbSettingsStyle.Name = "gbSettingsStyle";
             this.gbSettingsStyle.Size = new System.Drawing.Size(55, 57);
@@ -223,30 +226,30 @@
             this.gbSettingsStyle.TabStop = false;
             this.gbSettingsStyle.Text = "Style";
             // 
-            // rbSettingsStyle1
+            // rbStyleDark
             // 
-            this.rbSettingsStyle1.AutoSize = true;
-            this.rbSettingsStyle1.Location = new System.Drawing.Point(6, 34);
-            this.rbSettingsStyle1.Name = "rbSettingsStyle1";
-            this.rbSettingsStyle1.Size = new System.Drawing.Size(48, 17);
-            this.rbSettingsStyle1.TabIndex = 1;
-            this.rbSettingsStyle1.Text = "Dark";
-            this.rbSettingsStyle1.UseVisualStyleBackColor = true;
-            this.rbSettingsStyle1.CheckedChanged += new System.EventHandler(this.rbSettingsStyle1_CheckedChanged);
+            this.rbStyleDark.AutoSize = true;
+            this.rbStyleDark.Location = new System.Drawing.Point(6, 34);
+            this.rbStyleDark.Name = "rbStyleDark";
+            this.rbStyleDark.Size = new System.Drawing.Size(48, 17);
+            this.rbStyleDark.TabIndex = 1;
+            this.rbStyleDark.Text = "Dark";
+            this.rbStyleDark.UseVisualStyleBackColor = true;
+            this.rbStyleDark.CheckedChanged += new System.EventHandler(this.rbStyleDark_CheckedChanged);
             // 
-            // rbSettingsStyle0
+            // rbStyleLight
             // 
-            this.rbSettingsStyle0.AllowDrop = true;
-            this.rbSettingsStyle0.AutoSize = true;
-            this.rbSettingsStyle0.Checked = true;
-            this.rbSettingsStyle0.Location = new System.Drawing.Point(6, 17);
-            this.rbSettingsStyle0.Name = "rbSettingsStyle0";
-            this.rbSettingsStyle0.Size = new System.Drawing.Size(48, 17);
-            this.rbSettingsStyle0.TabIndex = 0;
-            this.rbSettingsStyle0.TabStop = true;
-            this.rbSettingsStyle0.Text = "Light";
-            this.rbSettingsStyle0.UseVisualStyleBackColor = true;
-            this.rbSettingsStyle0.CheckedChanged += new System.EventHandler(this.rbSettingsStyle0_CheckedChanged);
+            this.rbStyleLight.AllowDrop = true;
+            this.rbStyleLight.AutoSize = true;
+            this.rbStyleLight.Checked = true;
+            this.rbStyleLight.Location = new System.Drawing.Point(6, 17);
+            this.rbStyleLight.Name = "rbStyleLight";
+            this.rbStyleLight.Size = new System.Drawing.Size(48, 17);
+            this.rbStyleLight.TabIndex = 0;
+            this.rbStyleLight.TabStop = true;
+            this.rbStyleLight.Text = "Light";
+            this.rbStyleLight.UseVisualStyleBackColor = true;
+            this.rbStyleLight.CheckedChanged += new System.EventHandler(this.rbStyleLight_CheckedChanged);
             // 
             // bStart
             // 
@@ -501,7 +504,7 @@
             this.rtbMOTD.Name = "rtbMOTD";
             this.rtbMOTD.Size = new System.Drawing.Size(155, 121);
             this.rtbMOTD.TabIndex = 0;
-            this.rtbMOTD.Text = "Welcome!\nYou managed to connect to my test server.\nHave a good day";
+            this.rtbMOTD.Text = "Welcome!\nYou *managed* to connect to my **test server**.\nHave a good day";
             this.rtbMOTD.TextChanged += new System.EventHandler(this.rtbMOTD_TextChanged);
             // 
             // fMain
@@ -570,8 +573,8 @@
         private System.Windows.Forms.GroupBox gbSettingsChat;
         private System.Windows.Forms.TextBox tbUsername;
         private System.Windows.Forms.GroupBox gbSettingsStyle;
-        private System.Windows.Forms.RadioButton rbSettingsStyle1;
-        private System.Windows.Forms.RadioButton rbSettingsStyle0;
+        private System.Windows.Forms.RadioButton rbStyleDark;
+        private System.Windows.Forms.RadioButton rbStyleLight;
         private System.Windows.Forms.Button bStart;
         private System.Windows.Forms.Label lPassword;
         private System.Windows.Forms.TextBox tbPassword;
