@@ -17,15 +17,18 @@ namespace TCPClient
 {
     public partial class fMain : Form
     {
-        private TcpClient client = null;
-        private BinaryWriter writing = null;
-        private BinaryReader reading = null;
-
         public fMain()
         {
             InitializeComponent();
         }
 
+        #region Zmienne
+        private TcpClient client = null;
+        private BinaryWriter writing = null;
+        private BinaryReader reading = null;
+        #endregion
+
+        #region Przyciski
         private void bConnect_Click(object sender, EventArgs e)
         {
             lbLogger.Items.Add("Attempting connection ...");
@@ -56,6 +59,21 @@ namespace TCPClient
             bSend.Enabled = false;
         }
 
+        private void bSend_Click(object sender, EventArgs e)
+        {
+            string uColor = "rgb(" + nudUserColorRed.Value + "," + nudUserColorGreen.Value + "," + nudUserColorBlue.Value + ")";
+            string msgColor = "rgb(" + nudMessageColorRed.Value + "," + nudMessageColorGreen.Value + "," + nudMessageColorBlue.Value + ")";
+
+            MessageObject product = new MessageObject("message", tbUsername.Text, tbMessage.Text, uColor, msgColor);
+
+            string json = JsonConvert.SerializeObject(product);
+
+            string messageSent = json;
+            writing.Write(messageSent);
+        }
+        #endregion
+
+        #region Połączenie
         private void bwConnection_DoWork(object sender, DoWorkEventArgs e)
         {
             IPAddress serverIP = null;
@@ -97,6 +115,47 @@ namespace TCPClient
                 this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
             }
         }
+        #endregion
+
+        #region Style
+        private void rbDark_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbDark.Checked)
+            {
+                this.BackColor = SystemColors.ControlDark;
+            }
+        }
+
+        private void rbLight_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbLight.Checked)
+            {
+                this.BackColor = SystemColors.Control;
+            }
+        }
+        #endregion
+
+        #region Komunikacja
+        private void displayMessage(string messageBlock)
+        {
+            MessageObject product = JsonConvert.DeserializeObject<MessageObject>(messageBlock);
+
+            string message = product.uMsg;
+            message = message.Replace("<", "&lt;");
+            message = message.Replace(">", "&gt;");
+
+            message = CommonMarkConverter.Convert(message);
+
+            message = message.Replace("<p>", "");
+            message = message.Replace("</p>", "");
+            message = message.Replace("<img", "<img style=\"width: 300px\"");
+
+            this.Invoke((MethodInvoker)(() => wbMessage.DocumentText +=
+            "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now +
+            "<br><div  style=\"display: inline; color: " + product.uColor + "\">" +
+            product.uName + ": </div><div style=\"display: inline; color: " + product.msgColor +
+            "\">"   + message + "</div><br><hr></div><script>document.body.scrollTop = document.body.scrollHeight</script>"));
+        }
 
         private void bwMessages_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -122,56 +181,7 @@ namespace TCPClient
                 this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
             }
         }
-
-        private void bSend_Click(object sender, EventArgs e)
-        {
-            string uColor = "rgb(" + nudUserColorRed.Value + "," + nudUserColorGreen.Value + "," + nudUserColorBlue.Value + ")";
-            string msgColor = "rgb(" + nudMessageColorRed.Value + "," + nudMessageColorGreen.Value + "," + nudMessageColorBlue.Value + ")";
-
-            MessageObject product = new MessageObject("message", tbUsername.Text, tbMessage.Text, uColor, msgColor);
-
-            string json = JsonConvert.SerializeObject(product);
-
-            string messageSent = json;
-            writing.Write(messageSent);
-        }
-
-        private void rbDark_CheckedChanged(object sender, EventArgs e)
-        {
-            if (rbDark.Checked)
-            {
-                this.BackColor = SystemColors.ControlDark;
-            }
-        }
-
-        private void rbLight_CheckedChanged(object sender, EventArgs e)
-        {
-            if (rbLight.Checked)
-            {
-                this.BackColor = SystemColors.Control;
-            }
-        }
-
-        private void displayMessage(string messageBlock)
-        {
-            MessageObject product = JsonConvert.DeserializeObject<MessageObject>(messageBlock);
-
-            string message = product.uMsg;
-            message = message.Replace("<", "&lt;");
-            message = message.Replace(">", "&gt;");
-
-            message = CommonMarkConverter.Convert(message);
-
-            message = message.Replace("<p>", "");
-            message = message.Replace("</p>", "");
-            message = message.Replace("<img", "<img style=\"width: 300px\"");
-
-            this.Invoke((MethodInvoker)(() => wbMessage.DocumentText +=
-            "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now +
-            "<br><div  style=\"display: inline; color: " + product.uColor + "\">" +
-            product.uName + ": </div><div style=\"display: inline; color: " + product.msgColor +
-            "\">"   + message + "</div><br><hr></div><script>document.body.scrollTop = document.body.scrollHeight</script>"));
-        }
+        #endregion
     }
 
     internal class MessageObject
