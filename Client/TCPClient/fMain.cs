@@ -65,7 +65,6 @@ namespace TCPClient
             string msgColor = "rgb(" + nudMessageColorRed.Value + "," + nudMessageColorGreen.Value + "," + nudMessageColorBlue.Value + ")";
 
             MessageObject product = new MessageObject("message", tbUsername.Text, tbMessage.Text, uColor, msgColor);
-
             string json = JsonConvert.SerializeObject(product);
 
             string messageSent = json;
