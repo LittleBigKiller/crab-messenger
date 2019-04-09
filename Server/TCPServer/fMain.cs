@@ -31,6 +31,8 @@ namespace TCPServer
         ushort port;
 
         private TcpListener server = null;
+
+        string motd = "";
         #endregion
 
         #region Przyciski
@@ -95,6 +97,8 @@ namespace TCPServer
         #region Połączenie
         private void bwConnection_DoWork(object sender, DoWorkEventArgs e)
         {
+            this.Invoke((MethodInvoker)(() => motd = rtbMOTD.Text));
+
             int count = 0;
             serverIP = null;
 
@@ -140,10 +144,18 @@ namespace TCPServer
 
                             this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: Client connected")));
 
+                            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("MOTD: " + motd)));
+                            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(motd)));
+
                             NetworkStream stream = client.GetStream();
                             BinaryWriter writer = new BinaryWriter(stream);
-                            MessageObject product = new MessageObject("message", "[" + serverIP.ToString() + ":" + port.ToString() + "]", "" + "motd", "rgb(0, 127, 0)", "rgb(0, 127, 0)");
+                            //MessageObject product = new MessageObject("message", "[" + serverIP.ToString() + ":" + port.ToString() + "]", "LMAO" + rtbMOTD.Text, "rgb(0, 127, 0)", "rgb(0, 127, 0)");
+                            MessageObject product = new MessageObject("message", "[Message of the Day]: ", " " + motd, "rgb(0, 127, 0)", "rgb(0, 127, 0)");
                             writer.Write(JsonConvert.SerializeObject(product));
+
+                            //this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("MOTD: " + rtbMOTD.SelectedText)));
+                            //MessageObject temp = new MessageObject("message", "[" + serverIP.ToString() + ":" + port.ToString() + "]", "" + "rtbMOTD.SelectedText", "rgb(0, 127, 0)", "rgb(0, 127, 0)");
+                            //writer.Write(JsonConvert.SerializeObject(temp));
 
                             Thread t = new Thread(handle_clients);
                             t.IsBackground = true;
@@ -180,6 +192,11 @@ namespace TCPServer
                 this.Invoke((MethodInvoker)(() => bStart.Enabled = true));
                 this.Invoke((MethodInvoker)(() => bStop.Enabled = false));
             }
+        }
+
+        private void rtbMOTD_TextChanged(object sender, EventArgs e)
+        {
+            motd = rtbMOTD.Text;
         }
         #endregion
 

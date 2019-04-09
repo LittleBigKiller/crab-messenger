@@ -502,6 +502,7 @@
             this.rtbMOTD.Size = new System.Drawing.Size(155, 121);
             this.rtbMOTD.TabIndex = 0;
             this.rtbMOTD.Text = "Welcome!\nYou managed to connect to my test server.\nHave a good day";
+            this.rtbMOTD.TextChanged += new System.EventHandler(this.rtbMOTD_TextChanged);
             // 
             // fMain
             // 
