@@ -105,8 +105,6 @@ namespace TCPClient
                 string messageRecieved;
                 while ((messageRecieved = reading.ReadString()) != "END")
                 {
-                    //this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += "<div style=\"width:350px; word-wrap:break-word;\">" + DateTime.Now + "<br>" + "Anon: " + messageRecieved + "<br><hr></div>"));
-                    //this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageRecieved)));
                     displayMessage(messageRecieved);
                 }
                 client.Close();
@@ -156,22 +154,17 @@ namespace TCPClient
 
         private void displayMessage(string messageBlock)
         {
-            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageBlock)));
             MessageObject product = JsonConvert.DeserializeObject<MessageObject>(messageBlock);
-            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("UName = " + product.uName)));
-            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("UMsg = " + product.uMsg)));
 
             string message = product.uMsg;
             message = message.Replace("<", "&lt;");
             message = message.Replace(">", "&gt;");
 
             message = CommonMarkConverter.Convert(message);
-            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("message = " + message)));
 
             message = message.Replace("<p>", "");
             message = message.Replace("</p>", "");
             message = message.Replace("<img", "<img style=\"width: 300px\"");
-            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("message = " + message)));
 
             this.Invoke((MethodInvoker)(() => wbMessage.DocumentText +=
             "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now +
@@ -189,7 +182,7 @@ namespace TCPClient
         public readonly string msgColor;
         public readonly string uColor;
 
-        public MessageObject(string msgtype, string uname, string umsg, string msgcolor, string ucolor)
+        public MessageObject(string msgtype, string uname, string umsg, string ucolor, string msgcolor)
         {
             msgType = msgtype;
             uName = uname;

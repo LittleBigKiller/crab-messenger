@@ -257,22 +257,17 @@ namespace TCPServer
         #region Komunikacja
         private void displayMessage(string messageBlock)
         {
-            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageBlock)));
             MessageObject product = JsonConvert.DeserializeObject<MessageObject>(messageBlock);
-            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("UName = " + product.uName)));
-            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("UMsg = " + product.uMsg)));
 
             string message = product.uMsg;
             message = message.Replace("<", "&lt;");
             message = message.Replace(">", "&gt;");
 
             message = CommonMarkConverter.Convert(message);
-            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("message = " + message)));
 
             message = message.Replace("<p>", "");
             message = message.Replace("</p>", "");
             message = message.Replace("<img", "<img style=\"width: 300px\"");
-            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("message = " + message)));
 
             this.Invoke((MethodInvoker)(() => wbMessage.DocumentText +=
             "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now +
@@ -345,6 +340,7 @@ namespace TCPServer
         }
         #endregion
     }
+
     internal class MessageObject
     {
         public readonly string msgType;
@@ -353,7 +349,7 @@ namespace TCPServer
         public readonly string msgColor;
         public readonly string uColor;
 
-        public MessageObject(string msgtype, string uname, string umsg, string msgcolor, string ucolor)
+        public MessageObject(string msgtype, string uname, string umsg, string ucolor, string msgcolor)
         {
             msgType = msgtype;
             uName = uname;
