@@ -17,28 +17,37 @@ namespace TCPClient
 {
     public partial class fMain : Form
     {
-        private TcpClient client = null;
-        private BinaryWriter writing = null;
-        private BinaryReader reading = null;
-        private bool activeCall = false;
-
         public fMain()
         {
             InitializeComponent();
         }
 
+        #region Zmienne
+        private TcpClient client = null;
+        private BinaryWriter writing = null;
+        private BinaryReader reading = null;
+        #endregion
+
+        #region Przyciski
         private void bConnect_Click(object sender, EventArgs e)
         {
             lbLogger.Items.Add("Attempting connection ...");
-            //if (bwConnection.IsBusy)
-            //{
-                
-                bwConnection.RunWorkerAsync();
-           // }
+            bwConnection.RunWorkerAsync();
+
+            bConnect.Enabled = false;
+
+            wbMessage.Navigate("about:blank");
         }
 
         private void bDisconnect_Click(object sender, EventArgs e)
         {
+            NetworkStream stream = client.GetStream();
+            BinaryWriter writer = new BinaryWriter(stream);
+            MessageObject product = new MessageObject("message", "[NOTICE]", "Disconnected from server", "rgb(255, 0, 0)", "rgb(255, 0, 0)");
+            string json = JsonConvert.SerializeObject(product);
+            string messageSent = json;
+            displayMessage(messageSent);
+
             lbLogger.Items.Add("Closing connection ...");
             if (client != null)
             {
@@ -52,6 +61,20 @@ namespace TCPClient
             bSend.Enabled = false;
         }
 
+        private void bSend_Click(object sender, EventArgs e)
+        {
+            string uColor = "rgb(" + nudUserColorRed.Value + "," + nudUserColorGreen.Value + "," + nudUserColorBlue.Value + ")";
+            string msgColor = "rgb(" + nudMessageColorRed.Value + "," + nudMessageColorGreen.Value + "," + nudMessageColorBlue.Value + ")";
+
+            MessageObject product = new MessageObject("message", tbUsername.Text, tbMessage.Text, uColor, msgColor);
+            string json = JsonConvert.SerializeObject(product);
+
+            string messageSent = json;
+            writing.Write(messageSent);
+        }
+        #endregion
+
+        #region Połączenie
         private void bwConnection_DoWork(object sender, DoWorkEventArgs e)
         {
             IPAddress serverIP = null;
@@ -79,132 +102,148 @@ namespace TCPClient
                 NetworkStream ns = client.GetStream();
                 reading = new BinaryReader(ns);
                 writing = new BinaryWriter(ns);
-                writing.Write(tbPass.Text);
-                activeCall = true;
+                writing.Write(tbPassword.Text);
                 bwMessages.RunWorkerAsync();
                 this.Invoke((MethodInvoker)(() => bConnect.Enabled = false));
                 this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = true));
                 this.Invoke((MethodInvoker)(() => bSend.Enabled = true));
             }
-            catch (Exception ex)
+            catch
             {
-                activeCall = false;
-            }
-
-            if(!activeCall)
-            {
+                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Failed to connect!")));
                 this.Invoke((MethodInvoker)(() => bConnect.Enabled = true));
                 this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = false));
                 this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
             }
         }
+        #endregion
 
-        private void bwMessages_DoWork(object sender, DoWorkEventArgs e)
+        #region Style
+        private void rbStyleLight_CheckedChanged(object sender, EventArgs e)
         {
-            try
-            {
-                string messageRecieved;
-                while ((messageRecieved = reading.ReadString()) != "END")
-                {
-                    //this.Invoke((MethodInvoker)(() => wbMessage.DocumentText += "<div style=\"width:350px; word-wrap:break-word;\">" + DateTime.Now + "<br>" + "Anon: " + messageRecieved + "<br><hr></div>"));
-                    //this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageRecieved)));
-                    displayMessage(messageRecieved);
-                }
-                client.Close();
-                bwConnection.CancelAsync();
-                this.Invoke((MethodInvoker)(() => bConnect.Enabled = true));
-                this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = false));
-                this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
-            }
-            catch (Exception ex)
-            {
-                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Connection closed unexpectedly")));
-                this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("")));
-                this.Invoke((MethodInvoker)(() => bConnect.Enabled = true));
-                this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = false));
-                this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
-            }
-        }
-
-        private void bSend_Click(object sender, EventArgs e)
-        {
-            string uColor = "rgb(" + nudUserColorRed.Value + "," + nudUserColorGreen.Value + "," + nudUserColorBlue.Value + ")";
-            string msgColor = "rgb(" + nudMessageColorRed.Value + "," + nudMessageColorGreen.Value + "," + nudMessageColorBlue.Value + ")";
-
-            MessageObject product = new MessageObject(tbUsername.Text, tbMessage.Text, uColor, msgColor);
-
-            string json = JsonConvert.SerializeObject(product);
-
-            string messageSent = json;
-            writing.Write(messageSent);
-        }
-
-        private void btBold_Click(object sender, EventArgs e)
-        {
-            tbMessage.Text += "<b></b>";
-        }
-
-        private void btItalic_Click(object sender, EventArgs e)
-        {
-            tbMessage.Text += "<i></i>";
-        }
-
-        private void rbDark_CheckedChanged(object sender, EventArgs e)
-        {
-            if (rbDark.Checked)
-            {
-                this.BackColor = SystemColors.ControlDark;
-            }
-        }
-
-        private void rbLight_CheckedChanged(object sender, EventArgs e)
-        {
-            if (rbLight.Checked)
+            if (rbStyleLight.Checked)
             {
                 this.BackColor = SystemColors.Control;
+
+                tbAddress.BackColor = SystemColors.Window;
+                tbMessage.BackColor = SystemColors.Window;
+                tbPassword.BackColor = SystemColors.Window;
+                tbUsername.BackColor = SystemColors.Window;
+
+                lbLogger.BackColor = SystemColors.Window;
+
+                nudMessageColorBlue.BackColor = SystemColors.Window;
+                nudMessageColorGreen.BackColor = SystemColors.Window;
+                nudMessageColorRed.BackColor = SystemColors.Window;
+
+                nudPort.BackColor = SystemColors.Window;
+
+                nudUserColorBlue.BackColor = SystemColors.Window;
+                nudUserColorGreen.BackColor = SystemColors.Window;
+                nudUserColorRed.BackColor = SystemColors.Window;
+
+                wbMessage.Document.Body.Style = "background-color: white";
             }
         }
 
+        private void rbStyleDark_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbStyleDark.Checked)
+            {
+                this.BackColor = SystemColors.ControlDarkDark;
+
+                tbAddress.BackColor = SystemColors.ControlDark;
+                tbMessage.BackColor = SystemColors.ControlDark;
+                tbPassword.BackColor = SystemColors.ControlDark;
+                tbUsername.BackColor = SystemColors.ControlDark;
+
+                lbLogger.BackColor = SystemColors.ControlDark;
+
+                nudMessageColorBlue.BackColor = SystemColors.ControlDark;
+                nudMessageColorGreen.BackColor = SystemColors.ControlDark;
+                nudMessageColorRed.BackColor = SystemColors.ControlDark;
+
+                nudPort.BackColor = SystemColors.ControlDark;
+
+                nudUserColorBlue.BackColor = SystemColors.ControlDark;
+                nudUserColorGreen.BackColor = SystemColors.ControlDark;
+                nudUserColorRed.BackColor = SystemColors.ControlDark;
+
+                wbMessage.Document.Body.Style = "background-color: gray";
+            }
+        }
+
+        private void wbMessage_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            if (rbStyleDark.Checked) wbMessage.Document.Body.Style = "background-color: gray";
+        }
+        #endregion
+
+        #region Komunikacja
         private void displayMessage(string messageBlock)
         {
-            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add(messageBlock)));
             MessageObject product = JsonConvert.DeserializeObject<MessageObject>(messageBlock);
-            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("UName = " + product.uName)));
-            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("UMsg = " + product.uMsg)));
 
             string message = product.uMsg;
             message = message.Replace("<", "&lt;");
             message = message.Replace(">", "&gt;");
 
             message = CommonMarkConverter.Convert(message);
-            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("message = " + message)));
 
             message = message.Replace("<p>", "");
             message = message.Replace("</p>", "");
-            this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("message = " + message)));
+            message = message.Replace("<img", "<img style=\"width: 300px\"");
 
-            this.Invoke((MethodInvoker)(() => wbMessage.DocumentText +=
-            "<div style=\"width: 300px; word-wrap: break-word;\">" + DateTime.Now +
+            HtmlDocument doc = null;
+
+            this.Invoke((MethodInvoker)(() => doc = wbMessage.Document));
+
+            HtmlElement msgDiv = doc.CreateElement("DIV");
+            msgDiv.Style = "width: 300px; word-wrap: break-word;";
+            msgDiv.InnerHtml = "" + DateTime.Now +
             "<br><div  style=\"display: inline; color: " + product.uColor + "\">" +
             product.uName + ": </div><div style=\"display: inline; color: " + product.msgColor +
-            "\">"   + message + "</div><br><hr></div>"));
+            "\">" + message + "</div><br><hr><script>document.body.scrollTop = document.body.scrollHeight</script>";
+
+            this.Invoke((MethodInvoker)(() => doc.Body.AppendChild(msgDiv)));
         }
 
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        private void bwMessages_DoWork(object sender, DoWorkEventArgs e)
         {
+            string messageRecieved;
+            try { 
+                while ((messageRecieved = reading.ReadString()) != "END")
+                {
+                    displayMessage(messageRecieved);
+                }
+                client.Close();
+                bwConnection.CancelAsync();
 
+                this.Invoke((MethodInvoker)(() => bConnect.Enabled = true));
+                this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = false));
+                this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
+            }
+            catch
+            {
+                this.Invoke((MethodInvoker)(() => bConnect.Enabled = true));
+                this.Invoke((MethodInvoker)(() => bDisconnect.Enabled = false));
+                this.Invoke((MethodInvoker)(() => bSend.Enabled = false));
+            }
         }
+        #endregion
     }
 
     internal class MessageObject
     {
+        public readonly string msgType;
         public readonly string uName;
         public readonly string uMsg;
         public readonly string msgColor;
         public readonly string uColor;
-        
-        public MessageObject(string uname, string umsg, string msgcolor, string ucolor)
+
+        public MessageObject(string msgtype, string uname, string umsg, string ucolor, string msgcolor)
         {
+            msgType = msgtype;
             uName = uname;
             uMsg = umsg;
             msgColor = msgcolor;
