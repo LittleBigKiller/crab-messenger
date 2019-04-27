@@ -21,6 +21,7 @@ namespace TCPServer
         public fMain()
         {
             InitializeComponent();
+            wbMessage.IsWebBrowserContextMenuEnabled = false;
         }
 
         #region Zmienne
@@ -46,6 +47,7 @@ namespace TCPServer
             bSend.Enabled = true;
 
             wbMessage.Navigate("about:blank");
+            wbMessage.IsWebBrowserContextMenuEnabled = false;
         }
 
         private void bStop_Click(object sender, EventArgs e)
