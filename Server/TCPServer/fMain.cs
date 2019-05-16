@@ -72,21 +72,25 @@ namespace TCPServer
             bStop.Enabled = false;
             bSend.Enabled = false;
         }
-        
+
         private void bSend_Click(object sender, EventArgs e)
         {
             try
             {
-                string uColor = "rgb(" + nudUserColorRed.Value + "," + nudUserColorGreen.Value + "," + nudUserColorBlue.Value + ")";
-                string msgColor = "rgb(" + nudMessageColorRed.Value + "," + nudMessageColorGreen.Value + "," + nudMessageColorBlue.Value + ")";
+                if (tbMessage.Text != "")
+                {
+                    string uColor = "rgb(" + nudUserColorRed.Value + "," + nudUserColorGreen.Value + "," + nudUserColorBlue.Value + ")";
+                    string msgColor = "rgb(" + nudMessageColorRed.Value + "," + nudMessageColorGreen.Value + "," + nudMessageColorBlue.Value + ")";
 
-                MessageObject product = new MessageObject("message", tbUsername.Text, tbMessage.Text, uColor, msgColor);
+                    MessageObject product = new MessageObject("message", tbUsername.Text, tbMessage.Text, uColor, msgColor);
+                    string json = JsonConvert.SerializeObject(product);
 
-                string json = JsonConvert.SerializeObject(product);
+                    tbMessage.Text = "";
 
-                string messageSent = json;
-                displayMessage(messageSent);
-                broadcast(messageSent);
+                    string messageSent = json;
+                    displayMessage(messageSent);
+                    broadcast(messageSent);
+                }
             }
             catch
             {
@@ -217,7 +221,7 @@ namespace TCPServer
                 nudUserColorBlue.BackColor = SystemColors.Window;
                 nudUserColorGreen.BackColor = SystemColors.Window;
                 nudUserColorRed.BackColor = SystemColors.Window;
-                
+
                 wbMessage.Document.Body.Style = "background-color: white";
             }
         }
@@ -246,7 +250,7 @@ namespace TCPServer
                 nudUserColorBlue.BackColor = SystemColors.ControlDark;
                 nudUserColorGreen.BackColor = SystemColors.ControlDark;
                 nudUserColorRed.BackColor = SystemColors.ControlDark;
-                
+
                 wbMessage.Document.Body.Style = "background-color: gray";
             }
         }
@@ -268,7 +272,7 @@ namespace TCPServer
                 cbUserlist.Items.Add("" + clientIP.ToString());
             }
         }
-        
+
         private void cbUserlist_Click(object sender, EventArgs e)
         {
             updateClientList();
@@ -290,7 +294,7 @@ namespace TCPServer
                 BinaryWriter writer = new BinaryWriter(stream);
                 MessageObject product = new MessageObject("message", "[" + serverIP.ToString() + ":" + port.ToString() + "]", "You have been kicked", "rgb(255, 0, 0)", "rgb(255, 0, 0)");
                 writer.Write(JsonConvert.SerializeObject(product));
-                
+
                 lock (_lock) list_clients.Remove(keyList[cbUserlist.SelectedIndex]);
                 client.Client.Shutdown(SocketShutdown.Both);
                 client.Close();
@@ -332,6 +336,8 @@ namespace TCPServer
             "\">" + message + "</div><br><hr><script>document.body.scrollTop = document.body.scrollHeight</script>";
 
             this.Invoke((MethodInvoker)(() => doc.Body.AppendChild(msgDiv)));
+
+            this.Invoke((MethodInvoker)(() => wbMessage.Document.Window.ScrollTo(0, wbMessage.Document.Body.ScrollRectangle.Height)));
         }
 
         public void handle_clients(object o)
@@ -373,7 +379,7 @@ namespace TCPServer
             {
                 client.Client.Shutdown(SocketShutdown.Both);
                 client.Close();
-                
+
                 this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("[" + clientIP.ToString() + "]: Client disconnected")));
             }
             catch

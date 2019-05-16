@@ -65,14 +65,26 @@ namespace TCPClient
 
         private void bSend_Click(object sender, EventArgs e)
         {
-            string uColor = "rgb(" + nudUserColorRed.Value + "," + nudUserColorGreen.Value + "," + nudUserColorBlue.Value + ")";
-            string msgColor = "rgb(" + nudMessageColorRed.Value + "," + nudMessageColorGreen.Value + "," + nudMessageColorBlue.Value + ")";
+            try
+            {
+                if (tbMessage.Text != "")
+                {
+                    string uColor = "rgb(" + nudUserColorRed.Value + "," + nudUserColorGreen.Value + "," + nudUserColorBlue.Value + ")";
+                    string msgColor = "rgb(" + nudMessageColorRed.Value + "," + nudMessageColorGreen.Value + "," + nudMessageColorBlue.Value + ")";
 
-            MessageObject product = new MessageObject("message", tbUsername.Text, tbMessage.Text, uColor, msgColor);
-            string json = JsonConvert.SerializeObject(product);
+                    MessageObject product = new MessageObject("message", tbUsername.Text, tbMessage.Text, uColor, msgColor);
+                    string json = JsonConvert.SerializeObject(product);
 
-            string messageSent = json;
-            writing.Write(messageSent);
+                    tbMessage.Text = "";
+
+                    string messageSent = json;
+                    writing.Write(messageSent);
+                }
+            }
+            catch
+            {
+
+            }
         }
         #endregion
 
@@ -99,7 +111,7 @@ namespace TCPClient
 
             try
             {
-                client = new TcpClient(serverIP.ToString(), port); 
+                client = new TcpClient(serverIP.ToString(), port);
                 this.Invoke((MethodInvoker)(() => lbLogger.Items.Add("Connected to [" + serverIP.ToString() + ":" + port + "]")));
                 NetworkStream ns = client.GetStream();
                 reading = new BinaryReader(ns);
@@ -208,12 +220,15 @@ namespace TCPClient
             "\">" + message + "</div><br><hr><script>document.body.scrollTop = document.body.scrollHeight</script>";
 
             this.Invoke((MethodInvoker)(() => doc.Body.AppendChild(msgDiv)));
+
+            this.Invoke((MethodInvoker)(() => wbMessage.Document.Window.ScrollTo(0, wbMessage.Document.Body.ScrollRectangle.Height)));
         }
 
         private void bwMessages_DoWork(object sender, DoWorkEventArgs e)
         {
             string messageRecieved;
-            try { 
+            try
+            {
                 while ((messageRecieved = reading.ReadString()) != "END")
                 {
                     displayMessage(messageRecieved);
