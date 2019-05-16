@@ -20,6 +20,7 @@ namespace TCPClient
         public fMain()
         {
             InitializeComponent();
+            wbMessage.IsWebBrowserContextMenuEnabled = false;
         }
 
         #region Zmienne
@@ -37,6 +38,7 @@ namespace TCPClient
             bConnect.Enabled = false;
 
             wbMessage.Navigate("about:blank");
+            wbMessage.IsWebBrowserContextMenuEnabled = false;
         }
 
         private void bDisconnect_Click(object sender, EventArgs e)
